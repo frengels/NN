@@ -1,0 +1,1 @@
+#include "nn/2d/sprite.hpp"
