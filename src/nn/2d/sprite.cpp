@@ -9,4 +9,6 @@ const sprite::rectangle_type& sprite::texture_rect() const { return m_rect; }
 
 nn::texture* sprite::texture() { return m_texture.get(); }
 const nn::texture* sprite::texture() const { return m_texture.get(); }
+float sprite::scale() const { return m_scale; }
+void sprite::set_scale(float f) { m_scale = f; }
 } // namespace nn
