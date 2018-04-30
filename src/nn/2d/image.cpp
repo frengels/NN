@@ -1,7 +1,7 @@
 #include "nn/2d/image.hpp"
 
 namespace nn {
-image::image(const std::string &filename, image::channels components) {
+image::image(const std::string& filename, image::channels components) {
   int file_channels;
   m_image_data = stbi_load(filename.c_str(), &m_dimensions.x, &m_dimensions.y,
                            &file_channels, static_cast<int>(components));
@@ -15,12 +15,12 @@ size_t image::size() const {
   return static_cast<int>(m_channels) * m_dimensions.x * m_dimensions.y;
 }
 
-image::value_type *image::data() { return m_image_data; }
-const image::value_type *image::data() const { return m_image_data; }
+image::value_type* image::data() { return m_image_data; }
+const image::value_type* image::data() const { return m_image_data; }
 
 int image::width() const { return m_dimensions.x; }
 int image::height() const { return m_dimensions.y; }
-const glm::ivec2 &image::dimensions() const { return m_dimensions; }
+const glm::ivec2& image::dimensions() const { return m_dimensions; }
 
 image::channels image::channel() const { return m_channels; }
 } // namespace nn

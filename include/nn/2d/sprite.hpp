@@ -15,10 +15,10 @@ private:
   rectangle<texture::size_type> m_rect;
 
 public:
-  sprite(const std::shared_ptr<nn::texture> &tex, const rectangle_type &rect);
-  const rectangle_type &texture_rect() const;
+  sprite(const std::shared_ptr<nn::texture>& tex, const rectangle_type& rect);
+  const rectangle_type& texture_rect() const;
 
-  nn::texture *texture();
-  const nn::texture *texture() const;
+  nn::texture* texture();
+  const nn::texture* texture() const;
 };
 } // namespace nn

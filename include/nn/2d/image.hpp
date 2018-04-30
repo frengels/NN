@@ -19,23 +19,23 @@ public:
   };
 
 private:
-  unsigned char *m_image_data;
+  unsigned char* m_image_data;
 
   glm::ivec2 m_dimensions;
 
   channels m_channels;
 
 public:
-  image(const std::string &filename, channels comp);
+  image(const std::string& filename, channels comp);
   ~image();
 
   size_t size() const;
-  value_type *data();
-  const value_type *data() const;
+  value_type* data();
+  const value_type* data() const;
 
   int width() const;
   int height() const;
-  const glm::ivec2 &dimensions() const;
+  const glm::ivec2& dimensions() const;
 
   image::channels channel() const;
 };

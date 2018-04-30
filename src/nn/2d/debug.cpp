@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 
 namespace nn {
-void _gl_check_error(const char *file, int line, const char *expression) {
+void _gl_check_error(const char* file, int line, const char* expression) {
   GLenum error_code = glGetError();
 
   if (error_code == GL_NO_ERROR) {
