@@ -26,7 +26,8 @@ public:
 
   nn::texture* texture();
   const nn::texture* texture() const;
-  float scale() const;
-  void set_scale(float f);
+
+  float sprite::scale() const;
+  void sprite::set_scale(float f);
 };
 } // namespace nn

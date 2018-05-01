@@ -6,8 +6,10 @@
 
 namespace nn {
 texture::texture(const image& img, texture::wrap wrap_mode)
-    : m_texture_id(0), m_width(img.width()), m_height(img.height()),
-      m_wrap(wrap_mode) {
+    : m_texture_id(0)
+    , m_width(img.width())
+    , m_height(img.height())
+    , m_wrap(wrap_mode) {
   // generate our texture
   NN_GL_DEBUG(glGenTextures(1, &m_texture_id));
   // set wrapping mode
@@ -18,7 +20,9 @@ texture::texture(const image& img, texture::wrap wrap_mode)
   NN_GL_DEBUG(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0,
                            GL_RGBA, GL_UNSIGNED_BYTE, std::data(img)));
 }
-texture::texture(const image& img) : texture(img, wrap::REPEAT) {}
+texture::texture(const image& img)
+    : texture(img, wrap::REPEAT) {
+}
 
 texture::~texture() {
   if (m_texture_id) {
@@ -26,9 +30,13 @@ texture::~texture() {
   }
 }
 
-GLuint texture::id() const { return m_texture_id; }
+GLuint texture::id() const {
+  return m_texture_id;
+}
 
-texture::wrap texture::wrapping_mode() const { return m_wrap; }
+texture::wrap texture::wrapping_mode() const {
+  return m_wrap;
+}
 
 void texture::set_wrapping_mode(texture::wrap w) {
   NN_GL_DEBUG(glBindTexture(GL_TEXTURE_2D, m_texture_id));
