@@ -33,6 +33,8 @@ public:
   size_t width() const;
   size_t height() const;
 
+  void bind() const;
+
   wrap wrapping_mode() const;
   void set_wrapping_mode(wrap w);
 };

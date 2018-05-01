@@ -1,2 +1,2 @@
 add_subdirectory(2d)
-add_subdirectory(sg)
+#add_subdirectory(sg)

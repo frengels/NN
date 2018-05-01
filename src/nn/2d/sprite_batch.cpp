@@ -1,48 +1,94 @@
 #include "nn/2d/sprite_batch.hpp"
 
 #include <array>
+#include <cstring>
 
 #include "nn/2d/debug.hpp"
 #include "nn/2d/vertex.hpp"
 
 namespace nn {
-sprite_batch::sprite_batch()
-    : m_sprites(0) {
+sprite_batch::sprite_batch() {
   auto descriptions = vertex::description();
 
   // allocate buffers
-  NN_GL_DEBUG(
-      glGenBuffers(std::size(m_vertex_buffers), std::data(m_vertex_buffers)));
-  NN_GL_DEBUG(
-      glGenBuffers(std::size(m_index_buffers), std::data(m_index_buffers)));
-  NN_GL_DEBUG(glGenVertexArrays(std::size(m_vertex_array_objects),
-                                std::data(m_vertex_array_objects)));
+  NN_GL_DEBUG(glGenBuffers(1, &m_vertex_buffer));
+  NN_GL_DEBUG(glGenBuffers(1, &m_index_buffer));
+  NN_GL_DEBUG(glGenVertexArrays(1, &m_vertex_array_object));
 
-  // setup vaos
-  for (size_t i = 0; i < std::size(m_vertex_array_objects); ++i) {
-    NN_GL_DEBUG(glBindVertexArray(m_vertex_array_objects[i]));
-    NN_GL_DEBUG(glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffers[i]));
-    NN_GL_DEBUG(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffers[i]));
+  // setup vao
+  NN_GL_DEBUG(glBindVertexArray(m_vertex_array_object));
+  NN_GL_DEBUG(glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer));
+  NN_GL_DEBUG(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer));
 
-    // bind attributes
-    for (const auto& attr_descr : descriptions.attributes) {
-      NN_GL_DEBUG(glEnableVertexAttribArray(attr_descr.index));
-      NN_GL_DEBUG(glVertexAttribPointer(
-          attr_descr.index, attr_descr.size, attr_descr.type,
-          attr_descr.normalized, descriptions.stride, attr_descr.offset));
-    }
+  // bind attributes
+  for (const auto& attr_descr : descriptions.attributes) {
+    NN_GL_DEBUG(glEnableVertexAttribArray(attr_descr.index));
+    NN_GL_DEBUG(glVertexAttribPointer(attr_descr.index, attr_descr.size,
+                                      attr_descr.type, attr_descr.normalized,
+                                      descriptions.stride, attr_descr.offset));
   }
 }
 
 sprite_batch::~sprite_batch() {
-  NN_GL_DEBUG(glDeleteVertexArrays(std::size(m_vertex_array_objects),
-                                   std::data(m_vertex_array_objects)));
-  NN_GL_DEBUG(glDeleteBuffers(std::size(m_vertex_buffers),
-                              std::data(m_vertex_buffers)));
-  NN_GL_DEBUG(
-      glDeleteBuffers(std::size(m_index_buffers), std::data(m_index_buffers)));
+  NN_GL_DEBUG(glDeleteVertexArrays(1, &m_vertex_array_object));
+  NN_GL_DEBUG(glDeleteBuffers(1, &m_vertex_buffer));
+  NN_GL_DEBUG(glDeleteBuffers(1, &m_index_buffer));
 }
 
-void sprite_batch::add(const sprite& spr, const glm::mat4& transformation) {
+void sprite_batch::add(const nn::sprite& spr, const glm::mat4& transformation) {
+  m_vertex_count += spr.vertices.size();
+  m_index_count += spr.indices.size();
+  m_sprites.emplace_back(transformation, spr);
+}
+
+void sprite_batch::flush() {
+  if (std::empty(m_sprites)) {
+    return;
+  }
+  // calculate the total number of vertices
+
+  // TODO: buffer the vertices so that we don't have to wait with uploading
+  // whilst the last frame is drawing, probably using GL_MAP_UNSYNCHRONIZED_BIT
+  // map our vertex buffer first
+  NN_GL_DEBUG(glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer));
+  NN_GL_DEBUG(glBufferData(GL_ARRAY_BUFFER, m_vertex_count * sizeof(vertex2d),
+                           nullptr, GL_STREAM_DRAW));
+  vertex2d* buffer_vertices =
+      reinterpret_cast<vertex2d*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
+  // next map our indices
+  NN_GL_DEBUG(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer));
+  NN_GL_DEBUG(glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+                           m_index_count * sizeof(GLushort), nullptr,
+                           GL_STREAM_DRAW));
+  GLushort* buffer_indices = reinterpret_cast<GLushort*>(
+      glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY));
+
+  size_t distance_v = 0;
+  size_t distance_i = 0;
+
+  for (const auto& sprite_pair : m_sprites) {
+    const auto& vertices = sprite_pair.second.vertices;
+    const auto& indices = sprite_pair.second.indices;
+    std::memcpy(buffer_vertices + distance_v, std::data(vertices),
+                std::size(vertices) *
+                    sizeof(std::decay_t<decltype(vertices)>::value_type));
+    std::memcpy(buffer_indices + distance_i, std::data(indices),
+                std::size(indices) *
+                    sizeof(std::decay_t<decltype(indices)>::value_type));
+    distance_v += std::size(vertices);
+    distance_i += std::size(indices);
+  }
+
+  NN_GL_DEBUG(glUnmapBuffer(GL_ARRAY_BUFFER));
+  NN_GL_DEBUG(glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER));
+
+  // TODO: map the texture etc
+
+  glActiveTexture(GL_TEXTURE0);
+  m_sprites[0].second.texture->bind();
+
+  NN_GL_DEBUG(glBindVertexArray(m_vertex_array_object));
+  NN_GL_DEBUG(
+      glDrawElements(GL_TRIANGLES, m_index_count, GL_UNSIGNED_SHORT, nullptr));
 }
 } // namespace nn

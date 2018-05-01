@@ -15,11 +15,11 @@ namespace nn {
  */
 class sprite {
 public:
-  using rectangle_type = rectangle<texture::size_type>;
+  using rectangle_type = rectangle<nn::texture::size_type>;
 
 public:
-  std::shared_ptr<texture> texture;
-  rectangle<texture::size_type> rect;
+  std::shared_ptr<nn::texture> texture;
+  rectangle<nn::texture::size_type> rect;
 
   glm::vec2 anchor;
 

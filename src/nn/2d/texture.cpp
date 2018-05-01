@@ -42,6 +42,10 @@ size_t texture::height() const {
   return m_height;
 }
 
+void texture::bind() const {
+  NN_GL_DEBUG(glBindTexture(GL_TEXTURE_2D, m_texture_id));
+}
+
 texture::wrap texture::wrapping_mode() const {
   return m_wrap;
 }
