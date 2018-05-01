@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include "nn/2d/texture.hpp"
 #include "nn/stl/rectangle.hpp"
@@ -15,19 +16,18 @@ class sprite {
 public:
   using rectangle_type = rectangle<texture::size_type>;
 
-private:
-  std::shared_ptr<texture> m_texture;
-  rectangle<texture::size_type> m_rect;
-  float m_scale;
+public:
+  std::shared_ptr<texture> texture;
+  rectangle<texture::size_type> rect;
+  float scale;
+
+  glm::vec2 anchor;
+
+  std::vector<glm::vec2> vertices;
+  std::vector<GLushort> indices;
 
 public:
   sprite(const std::shared_ptr<nn::texture>& tex, const rectangle_type& rect);
   const rectangle_type& texture_rect() const;
-
-  nn::texture* texture();
-  const nn::texture* texture() const;
-
-  float sprite::scale() const;
-  void sprite::set_scale(float f);
 };
 } // namespace nn
