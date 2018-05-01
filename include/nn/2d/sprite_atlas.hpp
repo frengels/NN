@@ -16,14 +16,14 @@ struct sprite_description {
   std::vector<GLushort> indices;
 };
 
-class sprite_sheet {
+class sprite_atlas {
 private:
   std::shared_ptr<texture> m_texture;
 
   boost::container::flat_map<std::string, sprite_description> m_sprites;
 
 public:
-  sprite_sheet(const std::shared_ptr<texture>& tex,
+  sprite_atlas(const std::shared_ptr<texture>& tex,
                boost::container::flat_map<std::string, sprite_description>&&
                    descriptions);
 
