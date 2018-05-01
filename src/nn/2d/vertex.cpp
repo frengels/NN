@@ -1,6 +1,11 @@
 #include "nn/2d/vertex.hpp"
 
 namespace nn {
+vertex2d::vertex2d(const glm::vec2& position, const glm::vec2& tex_coords)
+    : position(position)
+    , tex_coords(tex_coords) {
+}
+
 vertex::vertex(const glm::vec3& position, const glm::vec2& tex_coords)
     : position(position)
     , tex_coords(tex_coords) {
@@ -22,7 +27,7 @@ vertex_description<2> vertex::description() {
   descr.attributes[0].offset =
       reinterpret_cast<GLvoid*>(offsetof(vertex, position));
 
-  descr.attributes[1].index = 1;
+  descr.attributes[1].index = 2;
   descr.attributes[1].size =
       sizeof(tex_coords) / sizeof(decltype(tex_coords)::value_type);
   descr.attributes[1].type = GL_FLOAT;

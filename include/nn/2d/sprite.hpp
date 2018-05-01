@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "nn/2d/texture.hpp"
+#include "nn/2d/vertex.hpp"
 #include "nn/stl/rectangle.hpp"
 
 namespace nn {
@@ -19,14 +20,18 @@ public:
 public:
   std::shared_ptr<texture> texture;
   rectangle<texture::size_type> rect;
-  float scale;
 
   glm::vec2 anchor;
 
-  std::vector<glm::vec2> vertices;
+  std::vector<vertex2d> vertices;
   std::vector<GLushort> indices;
 
 public:
+  sprite(const std::shared_ptr<nn::texture>& tex, const rectangle_type& rect,
+         const glm::ivec2& anchor, const std::vector<vertex2d>& vertices,
+         const std::vector<GLushort>& indices);
+  sprite(const std::shared_ptr<nn::texture>& tex, const rectangle_type& rect,
+         const glm::vec2& anchor);
   sprite(const std::shared_ptr<nn::texture>& tex, const rectangle_type& rect);
   const rectangle_type& texture_rect() const;
 };

@@ -30,6 +30,9 @@ public:
 
   GLuint id() const;
 
+  size_t width() const;
+  size_t height() const;
+
   wrap wrapping_mode() const;
   void set_wrapping_mode(wrap w);
 };

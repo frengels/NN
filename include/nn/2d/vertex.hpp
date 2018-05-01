@@ -21,6 +21,13 @@ struct vertex_description {
   std::array<attribute_description, N> attributes;
 };
 
+struct vertex2d {
+  glm::vec2 position;
+  glm::vec2 tex_coords;
+
+  vertex2d(const glm::vec2& position, const glm::vec2& tex_coords);
+};
+
 struct vertex {
   glm::vec3 position;
   glm::vec2 tex_coords;

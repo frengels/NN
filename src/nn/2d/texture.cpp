@@ -34,6 +34,14 @@ GLuint texture::id() const {
   return m_texture_id;
 }
 
+size_t texture::width() const {
+  return m_width;
+}
+
+size_t texture::height() const {
+  return m_height;
+}
+
 texture::wrap texture::wrapping_mode() const {
   return m_wrap;
 }
