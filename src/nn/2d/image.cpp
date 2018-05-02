@@ -1,5 +1,8 @@
 #include "nn/2d/image.hpp"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
+
 namespace nn {
 image::image(const std::string& filename, image::channels components) {
   int file_channels;
@@ -8,6 +11,12 @@ image::image(const std::string& filename, image::channels components) {
 
   if (components == image::channels::DEFAULT) {
     m_channels = static_cast<image::channels>(file_channels);
+  }
+}
+
+image::~image() {
+  if (m_image_data) {
+    stbi_image_free(m_image_data);
   }
 }
 

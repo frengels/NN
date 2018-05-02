@@ -3,7 +3,6 @@
 #include <string>
 
 #include <glm/glm.hpp>
-#include <stb/stb_image.h>
 
 namespace nn {
 class image {
@@ -11,11 +10,11 @@ public:
   using value_type = unsigned char;
 
   enum class channels {
-    DEFAULT = STBI_default,
-    GREY = STBI_grey,
-    GREY_ALPHA = STBI_grey_alpha,
-    RGB = STBI_rgb,
-    RGBA = STBI_rgb_alpha
+    DEFAULT = 0,
+    GREY = 1,
+    GREY_ALPHA = 2,
+    RGB = 3,
+    RGBA = 4
   };
 
 private:

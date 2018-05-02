@@ -5,6 +5,12 @@ project(NN CXX)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 17)
 
+set(CMAKE_MODULE_PATH
+    ${CMAKE_SOURCE_DIR}/cmake/modules
+    ${CMAKE_MODULE_PATH})
+
 find_package(GLEW REQUIRED)
+find_package(OpenGL REQUIRED)
 
 add_subdirectory(src/nn)
+add_subdirectory(samples)

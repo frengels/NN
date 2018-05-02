@@ -9,5 +9,5 @@ add_library(2d
             shader.cpp
             shader_program.cpp)
 
-target_include_directories(2d PRIVATE ${CMAKE_SOURCE_DIR}/include)
-target_link_libraries(2d GLEW::GLEW)
+target_include_directories(2d PRIVATE ${CMAKE_SOURCE_DIR}/include ${OPENGL_INCLUDE_DIR})
+target_link_libraries(2d ${OPENGL_LIBRARY} GLEW::GLEW )
