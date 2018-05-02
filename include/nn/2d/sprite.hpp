@@ -15,11 +15,9 @@ namespace nn {
  */
 class sprite {
 public:
-  using rectangle_type = rectangle<nn::texture::size_type>;
-
 public:
   std::shared_ptr<nn::texture> texture;
-  rectangle<nn::texture::size_type> rect;
+  srectangle rect;
 
   glm::vec2 anchor;
 
@@ -27,12 +25,12 @@ public:
   std::vector<GLushort> indices;
 
 public:
-  sprite(const std::shared_ptr<nn::texture>& tex, const rectangle_type& rect,
+  sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect,
          const glm::ivec2& anchor, const std::vector<vertex2d>& vertices,
          const std::vector<GLushort>& indices);
-  sprite(const std::shared_ptr<nn::texture>& tex, const rectangle_type& rect,
+  sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect,
          const glm::vec2& anchor);
-  sprite(const std::shared_ptr<nn::texture>& tex, const rectangle_type& rect);
-  const rectangle_type& texture_rect() const;
+  sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect);
+  sprite(const std::shared_ptr<nn::texture>& tex);
 };
 } // namespace nn

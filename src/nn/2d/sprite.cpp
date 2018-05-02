@@ -1,9 +1,8 @@
 #include "nn/2d/sprite.hpp"
 
 namespace nn {
-sprite::sprite(const std::shared_ptr<nn::texture>& tex,
-               const rectangle_type& rect, const glm::ivec2& anchor,
-               const std::vector<vertex2d>& vertices,
+sprite::sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect,
+               const glm::ivec2& anchor, const std::vector<vertex2d>& vertices,
                const std::vector<GLushort>& indices)
     : texture(tex)
     , rect(rect)
@@ -12,8 +11,8 @@ sprite::sprite(const std::shared_ptr<nn::texture>& tex,
     , indices(indices) {
 }
 
-sprite::sprite(const std::shared_ptr<nn::texture>& tex,
-               const rectangle_type& rect, const glm::vec2& anchor)
+sprite::sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect,
+               const glm::vec2& anchor)
     : sprite(tex, rect, anchor, {}, {0, 1, 2, 0, 2, 3}) {
   // generate our vertices, these will simply be 2 triangles which cover our
   // rectangle
@@ -47,8 +46,11 @@ sprite::sprite(const std::shared_ptr<nn::texture>& tex,
   // indices were already setup in the constructor
 }
 
-sprite::sprite(const std::shared_ptr<nn::texture>& tex,
-               const sprite::rectangle_type& rect)
+sprite::sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect)
     : sprite(tex, rect, glm::vec2(0.5f, 0.5f)) {
+}
+
+sprite::sprite(const std::shared_ptr<nn::texture>& tex)
+    : sprite(tex, srectangle(0, 0, tex->width(), tex->height())) {
 }
 } // namespace nn
