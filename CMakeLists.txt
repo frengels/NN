@@ -9,6 +9,8 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/cmake/modules
     ${CMAKE_MODULE_PATH})
 
+include(Warnings)
+
 find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 
