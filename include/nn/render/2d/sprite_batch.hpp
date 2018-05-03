@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 
 #include "nn/render/2d/sprite.hpp"
+#include "nn/render/shader_program.hpp"
 
 namespace nn {
 class sprite_batch {
@@ -25,6 +26,6 @@ public:
   ~sprite_batch();
 
   void add(const sprite& spr, const glm::mat4& transformation);
-  void flush();
+  void flush(const shader_program& sp, const glm::mat4& mvp);
 };
 } // namespace nn

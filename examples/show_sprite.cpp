@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
   // after window because we need an opengl context first
   glewInit();
 
-    nn::shader vert_shader(GL_VERTEX_SHADER);
+  nn::shader vert_shader(GL_VERTEX_SHADER);
   if (!vert_shader.compile_file("examples/shaders/basic.vert")) {
     printf(vert_shader.log()->c_str());
     return EXIT_FAILURE;
@@ -66,12 +66,10 @@ int main(int argc, char** argv) {
     cat_tex->bind();
     auto scale =
         glm::scale(glm::vec3(0.002f, 0.002f, 0.002f)); // make cat fit on screen
-    prog.uniform(3, scale);                            // set mvp matrix
-    prog.uniform(8, 0);
 
     cat_batch.add(cat_sprite, glm::mat4());
     cat_batch.add(cat_sprite, glm::translate(glm::vec3(100.f, 0.f, 0.f)));
-    cat_batch.flush();
+    cat_batch.flush(prog, scale);
 
     glfwSwapBuffers(window);
   }

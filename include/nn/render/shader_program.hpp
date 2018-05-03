@@ -33,8 +33,9 @@ public:
   void bind() const;
   void unbind() const;
 
-  void uniform(GLint location, const glm::mat4& m, bool transpose = false);
-  void uniform(GLint location, GLint i);
+  void uniform(GLint location, const glm::mat4& m,
+               bool transpose = false) const;
+  void uniform(GLint location, GLint i) const;
 
   bool bind_attribute_location(const std::string& attr, GLint location) const;
   GLint uniform_location(const std::string& uniform) const;

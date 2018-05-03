@@ -45,7 +45,7 @@ void sprite_batch::add(const nn::sprite& spr, const glm::mat4& transformation) {
   m_sprites.emplace_back(transformation, spr);
 }
 
-void sprite_batch::flush() {
+void sprite_batch::flush(const shader_program& sp, const glm::mat4& mvp) {
   if (std::empty(m_sprites)) {
     return;
   }
@@ -121,6 +121,10 @@ void sprite_batch::flush() {
   NN_GL_DEBUG(glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER));
 
   // TODO: map the texture etc
+
+  sp.bind();
+  sp.uniform(3, mvp); // set mvp matrix
+  sp.uniform(8, 0);   // set texture
 
   NN_GL_DEBUG(glActiveTexture(GL_TEXTURE0));
   m_sprites[0].second.texture->bind();

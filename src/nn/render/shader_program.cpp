@@ -66,11 +66,11 @@ void shader_program::unbind() const {
 }
 
 void shader_program::uniform(GLint location, const glm::mat4& m,
-                             bool transpose) {
+                             bool transpose) const {
   NN_GL_DEBUG(glUniformMatrix4fv(location, 1, transpose, &m[0][0]));
 }
 
-void shader_program::uniform(GLint location, GLint i) {
+void shader_program::uniform(GLint location, GLint i) const {
   NN_GL_DEBUG(glUniform1i(location, i));
 }
 
