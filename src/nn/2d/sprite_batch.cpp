@@ -40,8 +40,8 @@ sprite_batch::~sprite_batch() {
 }
 
 void sprite_batch::add(const nn::sprite& spr, const glm::mat4& transformation) {
-  m_vertex_count += spr.vertices.size();
-  m_index_count += spr.indices.size();
+  m_vertex_count += spr.geometry.vertices.size();
+  m_index_count += spr.geometry.indices.size();
   m_sprites.emplace_back(transformation, spr);
 }
 
@@ -71,8 +71,10 @@ void sprite_batch::flush() {
   size_t distance_i = 0;
 
   for (const auto& sprite_pair : m_sprites) {
-    std::vector<vertex2d> vertices(std::size(sprite_pair.second.vertices));
-    std::vector<GLushort> indices(std::size(sprite_pair.second.indices));
+    std::vector<vertex2d> vertices(
+        std::size(sprite_pair.second.geometry.vertices));
+    std::vector<GLushort> indices(
+        std::size(sprite_pair.second.geometry.indices));
 
     // get the dimensions of our texture so we can calculate translation for the
     // anchor
@@ -88,8 +90,8 @@ void sprite_batch::flush() {
     auto transformation = sprite_pair.first * anchor_translation;
 
     // transform each vertex by the transformation matrix
-    std::transform(std::begin(sprite_pair.second.vertices),
-                   std::end(sprite_pair.second.vertices),
+    std::transform(std::begin(sprite_pair.second.geometry.vertices),
+                   std::end(sprite_pair.second.geometry.vertices),
                    std::begin(vertices), [&](const auto& v) -> auto {
                      auto res = v;
                      res.position =
@@ -97,8 +99,8 @@ void sprite_batch::flush() {
                      return res;
                    });
 
-    std::transform(std::begin(sprite_pair.second.indices),
-                   std::end(sprite_pair.second.indices),
+    std::transform(std::begin(sprite_pair.second.geometry.indices),
+                   std::end(sprite_pair.second.geometry.indices),
                    std::begin(indices), [&](const auto& i) -> auto {
                      return i + distance_v;
                    });

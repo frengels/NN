@@ -7,8 +7,7 @@ sprite::sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect,
     : texture(tex)
     , rect(rect)
     , anchor(anchor)
-    , vertices(vertices)
-    , indices(indices) {
+    , geometry(vertices, indices) {
 }
 
 sprite::sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect,
@@ -27,24 +26,26 @@ sprite::sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect,
   float tex_coord_w = static_cast<float>(rect.width) / tex_width;
   float tex_coord_h = static_cast<float>(rect.height) / tex_height;
 
-  vertices.reserve(4);
+  geometry.vertices.reserve(4);
 
   // this might have to be reversed if the coordinate system is wrong
 
   // bottom left vertex, tex_coord x:0, y:1
-  vertices.emplace_back(glm::vec2(0.f, 0.f),
-                        glm::vec2(tex_coord_x, tex_coord_y + tex_coord_h));
+  geometry.vertices.emplace_back(
+      glm::vec2(0.f, 0.f), glm::vec2(tex_coord_x, tex_coord_y + tex_coord_h));
   // bottom right vertex, tex_coord x:1, y:1
-  vertices.emplace_back(
+  geometry.vertices.emplace_back(
       glm::vec2(static_cast<float>(rect.width), 0.f),
       glm::vec2(tex_coord_x + tex_coord_w, tex_coord_y + tex_coord_h));
   // upper right vertex, tex_coord x:1, y:0
-  vertices.emplace_back(glm::vec2(static_cast<float>(rect.width),
-                                  static_cast<float>(rect.height)),
-                        glm::vec2(tex_coord_x + tex_coord_w, tex_coord_y));
+  geometry.vertices.emplace_back(
+      glm::vec2(static_cast<float>(rect.width),
+                static_cast<float>(rect.height)),
+      glm::vec2(tex_coord_x + tex_coord_w, tex_coord_y));
   // upper left, tex_coord x:0, y:0
-  vertices.emplace_back(glm::vec2(0.f, static_cast<float>(rect.height)),
-                        glm::vec2(tex_coord_x, tex_coord_y));
+  geometry.vertices.emplace_back(
+      glm::vec2(0.f, static_cast<float>(rect.height)),
+      glm::vec2(tex_coord_x, tex_coord_y));
 
   // indices were already setup in the constructor
 }
