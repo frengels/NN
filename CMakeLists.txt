@@ -13,6 +13,7 @@ include(Warnings)
 
 find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(EGL REQUIRED)
 
 add_subdirectory(src/nn)
-add_subdirectory(samples)
+add_subdirectory(examples)

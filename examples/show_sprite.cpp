@@ -21,12 +21,12 @@ int main(int argc, char** argv) {
   // after window because we need an opengl context first
   glewInit();
 
-  std::ifstream vert_shader_f("samples/shaders/basic.vert",
+  std::ifstream vert_shader_f("examples/shaders/basic.vert",
                               std::ios::in | std::ios::ate);
   assert(vert_shader_f.is_open());
   auto vert_end = vert_shader_f.tellg();
   vert_shader_f.seekg(0);
-  std::ifstream frag_shader_f("samples/shaders/basic.frag",
+  std::ifstream frag_shader_f("examples/shaders/basic.frag",
                               std::ios::in | std::ios::ate);
   assert(frag_shader_f.is_open());
   auto frag_end = frag_shader_f.tellg();
@@ -64,7 +64,8 @@ int main(int argc, char** argv) {
   }
 
   nn::image cat_image;
-  assert(cat_image.load("samples/textures/cat.png", nn::image::channels::RGBA));
+  assert(
+      cat_image.load("examples/textures/cat.png", nn::image::channels::RGBA));
   auto cat_tex =
       std::make_shared<nn::texture>(cat_image, nn::texture::wrap::REPEAT);
   nn::sprite cat_sprite(cat_tex);
