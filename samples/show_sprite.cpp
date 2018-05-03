@@ -88,6 +88,7 @@ int main(int argc, char** argv) {
     prog.uniform(8, 0);
 
     cat_batch.add(cat_sprite, glm::mat4());
+    cat_batch.add(cat_sprite, glm::translate(glm::vec3(100.f, 0.f, 0.f)));
     cat_batch.flush();
 
     glfwSwapBuffers(window);

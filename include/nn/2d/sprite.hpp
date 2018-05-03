@@ -29,7 +29,7 @@ public:
 
 public:
   sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect,
-         const glm::ivec2& anchor, const std::vector<vertex_type>& vertices,
+         const glm::vec2& anchor, const std::vector<vertex_type>& vertices,
          const std::vector<index_type>& indices);
   sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect,
          const glm::vec2& anchor);

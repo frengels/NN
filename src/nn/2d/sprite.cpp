@@ -2,7 +2,7 @@
 
 namespace nn {
 sprite::sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect,
-               const glm::ivec2& anchor, const std::vector<vertex2d>& vertices,
+               const glm::vec2& anchor, const std::vector<vertex2d>& vertices,
                const std::vector<GLushort>& indices)
     : texture(tex)
     , rect(rect)

@@ -1,7 +1,10 @@
 #include "nn/2d/sprite_batch.hpp"
 
+#include <algorithm>
 #include <array>
 #include <cstring>
+
+#include <glm/gtx/transform.hpp>
 
 #include "nn/2d/debug.hpp"
 #include "nn/2d/vertex.hpp"
@@ -68,8 +71,38 @@ void sprite_batch::flush() {
   size_t distance_i = 0;
 
   for (const auto& sprite_pair : m_sprites) {
-    const auto& vertices = sprite_pair.second.vertices;
-    const auto& indices = sprite_pair.second.indices;
+    std::vector<vertex2d> vertices(std::size(sprite_pair.second.vertices));
+    std::vector<GLushort> indices(std::size(sprite_pair.second.indices));
+
+    // get the dimensions of our texture so we can calculate translation for the
+    // anchor
+    const auto& tex_w = static_cast<float>(sprite_pair.second.texture->width());
+    const auto& tex_h =
+        static_cast<float>(sprite_pair.second.texture->height());
+
+    const auto& anchor = sprite_pair.second.anchor;
+
+    auto anchor_translation =
+        glm::translate(glm::vec3(-tex_w * anchor.x, -tex_h * anchor.y, 0.0f));
+
+    auto transformation = sprite_pair.first * anchor_translation;
+
+    // transform each vertex by the transformation matrix
+    std::transform(std::begin(sprite_pair.second.vertices),
+                   std::end(sprite_pair.second.vertices),
+                   std::begin(vertices), [&](const auto& v) -> auto {
+                     auto res = v;
+                     res.position =
+                         transformation * glm::vec4(v.position, 0.f, 1.f);
+                     return res;
+                   });
+
+    std::transform(std::begin(sprite_pair.second.indices),
+                   std::end(sprite_pair.second.indices),
+                   std::begin(indices), [&](const auto& i) -> auto {
+                     return i + distance_v;
+                   });
+
     std::memcpy(buffer_vertices + distance_v, std::data(vertices),
                 std::size(vertices) *
                     sizeof(std::decay_t<decltype(vertices)>::value_type));

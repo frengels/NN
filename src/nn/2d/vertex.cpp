@@ -1,6 +1,9 @@
 #include "nn/2d/vertex.hpp"
 
 namespace nn {
+vertex2d::vertex2d()
+    : vertex2d(glm::vec2(0.f, 0.f), glm::vec2(0.f, 0.f)) {
+}
 vertex2d::vertex2d(const glm::vec2& position, const glm::vec2& tex_coords)
     : position(position)
     , tex_coords(tex_coords) {
