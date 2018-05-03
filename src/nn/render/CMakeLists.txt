@@ -12,4 +12,4 @@ set(RENDER_SRC
 
 add_library(render ${RENDER_SRC})
 target_include_directories(render PRIVATE ${CMAKE_SOURCE_DIR}/include ${OPENGL_INCLUDE_DIR})
-target_link_libraries(render ${OPENGL_LIBRARY} GLEW::GLEW )
+target_link_libraries(render ${OPENGL_LIBRARY} GLEW::GLEW EGL::EGL)
