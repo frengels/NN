@@ -23,7 +23,10 @@ bool shader_program::attach(const shader& s) {
 
   NN_GL_DEBUG(glAttachShader(m_program_id, s.id()));
   m_unlinked_shaders.push_back(s.id());
+
+  return true;
 }
+
 bool shader_program::link() {
   NN_GL_DEBUG(glLinkProgram(m_program_id));
 
