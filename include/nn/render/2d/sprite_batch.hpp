@@ -4,7 +4,7 @@
 
 #include <GL/glew.h>
 
-#include "nn/2d/sprite.hpp"
+#include "nn/render/2d/sprite.hpp"
 
 namespace nn {
 class sprite_batch {

@@ -3,9 +3,9 @@
 #include <memory>
 #include <vector>
 
-#include "nn/2d/geometry.hpp"
-#include "nn/2d/texture.hpp"
-#include "nn/2d/vertex.hpp"
+#include "nn/render/geometry.hpp"
+#include "nn/render/texture.hpp"
+#include "nn/render/vertex.hpp"
 #include "nn/stl/rectangle.hpp"
 
 namespace nn {

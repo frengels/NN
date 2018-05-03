@@ -1,4 +1,4 @@
-#include "nn/2d/image.hpp"
+#include "nn/render/image.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>

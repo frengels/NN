@@ -7,7 +7,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-#include "nn/2d/shader.hpp"
+#include "nn/render/shader.hpp"
 
 namespace nn {
 class shader_program {

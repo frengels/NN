@@ -2,7 +2,7 @@
 
 #include <GL/glew.h>
 
-#include "nn/2d/image.hpp"
+#include "nn/render/image.hpp"
 
 namespace nn {
 class texture {

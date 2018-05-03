@@ -1,8 +1,8 @@
-#include "nn/2d/shader_program.hpp"
+#include "nn/render/shader_program.hpp"
 
 #include <memory>
 
-#include "nn/2d/debug.hpp"
+#include "nn/render/debug.hpp"
 
 namespace nn {
 shader_program::shader_program()

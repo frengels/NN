@@ -1,4 +1,4 @@
-#include "nn/2d/debug.hpp"
+#include "nn/render/debug.hpp"
 
 #include <cstdio>
 #include <string>

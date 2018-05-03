@@ -1,4 +1,4 @@
-#include "nn/2d/vertex.hpp"
+#include "nn/render/vertex.hpp"
 
 namespace nn {
 vertex2d::vertex2d()

@@ -5,8 +5,8 @@
 
 #include <boost/container/flat_map.hpp>
 
-#include "nn/2d/sprite.hpp"
-#include "nn/2d/texture.hpp"
+#include "nn/render/2d/sprite.hpp"
+#include "nn/render/texture.hpp"
 
 namespace nn {
 struct sprite_description {

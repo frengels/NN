@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nn/2d/vertex.hpp"
+#include "nn/render/vertex.hpp"
 
 namespace nn {
 class sprite_renderer {

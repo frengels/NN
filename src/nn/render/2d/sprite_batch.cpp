@@ -1,4 +1,4 @@
-#include "nn/2d/sprite_batch.hpp"
+#include "nn/render/2d/sprite_batch.hpp"
 
 #include <algorithm>
 #include <array>
@@ -6,8 +6,8 @@
 
 #include <glm/gtx/transform.hpp>
 
-#include "nn/2d/debug.hpp"
-#include "nn/2d/vertex.hpp"
+#include "nn/render/debug.hpp"
+#include "nn/render/vertex.hpp"
 
 namespace nn {
 sprite_batch::sprite_batch() {

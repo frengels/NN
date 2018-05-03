@@ -1,4 +1,4 @@
-#include "nn/2d/sprite_atlas.hpp"
+#include "nn/render/2d/sprite_atlas.hpp"
 
 namespace nn {
 sprite_atlas::sprite_atlas(

@@ -5,10 +5,10 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtx/transform.hpp>
 
-#include "nn/2d/debug.hpp"
-#include "nn/2d/shader_program.hpp"
-#include "nn/2d/sprite.hpp"
-#include "nn/2d/sprite_batch.hpp"
+#include "nn/render/2d/sprite.hpp"
+#include "nn/render/2d/sprite_batch.hpp"
+#include "nn/render/debug.hpp"
+#include "nn/render/shader_program.hpp"
 
 int main(int argc, char** argv) {
   char buffer[FILENAME_MAX];

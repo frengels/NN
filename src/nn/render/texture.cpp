@@ -1,8 +1,8 @@
-#include "nn/2d/texture.hpp"
+#include "nn/render/texture.hpp"
 
 #include <cassert>
 
-#include "nn/2d/debug.hpp"
+#include "nn/render/debug.hpp"
 
 namespace nn {
 texture::texture(const image& img, texture::wrap wrap_mode)

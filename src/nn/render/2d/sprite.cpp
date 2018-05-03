@@ -1,4 +1,4 @@
-#include "nn/2d/sprite.hpp"
+#include "nn/render/2d/sprite.hpp"
 
 namespace nn {
 sprite::sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect,

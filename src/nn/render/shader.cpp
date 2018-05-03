@@ -1,8 +1,8 @@
-#include "nn/2d/shader.hpp"
+#include "nn/render/shader.hpp"
 
 #include <vector>
 
-#include "nn/2d/debug.hpp"
+#include "nn/render/debug.hpp"
 
 namespace nn {
 shader::shader(GLenum type)
