@@ -26,8 +26,8 @@ sprite_batch::sprite_batch() {
     NN_GL_DEBUG(glVertexAttribPointer(attr_descr.index, attr_descr.size,
                                       attr_descr.type, attr_descr.normalized,
                                       descriptions.stride, attr_descr.offset));
-    NN_GL_DEBUG(glBindVertexArray(0));
   }
+  NN_GL_DEBUG(glBindVertexArray(0));
 }
 
 sprite_batch::~sprite_batch() {
@@ -80,7 +80,9 @@ void sprite_batch::flush() {
     distance_i += std::size(indices);
   }
 
+  NN_GL_DEBUG(glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer));
   NN_GL_DEBUG(glUnmapBuffer(GL_ARRAY_BUFFER));
+  NN_GL_DEBUG(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer));
   NN_GL_DEBUG(glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER));
 
   // TODO: map the texture etc

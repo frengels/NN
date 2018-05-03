@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtx/transform.hpp>
 
+#include "nn/2d/debug.hpp"
 #include "nn/2d/shader_program.hpp"
 #include "nn/2d/sprite.hpp"
 #include "nn/2d/sprite_batch.hpp"
@@ -58,6 +59,10 @@ int main(int argc, char** argv) {
     printf(prog.log()->c_str());
   }
 
+  if (!prog.valid()) {
+    printf(prog.log()->c_str());
+  }
+
   nn::image cat_image;
   assert(cat_image.load("samples/textures/cat.png", nn::image::channels::RGBA));
   auto cat_tex =
@@ -66,15 +71,21 @@ int main(int argc, char** argv) {
 
   nn::sprite_batch cat_batch;
 
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
   while (!glfwWindowShouldClose(window)) {
+    NN_GL_DEBUG(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |
+                        GL_STENCIL_BUFFER_BIT));
     glfwPollEvents();
 
     prog.bind();
     glActiveTexture(GL_TEXTURE0);
     cat_tex->bind();
-    auto scale = glm::scale(glm::vec3(0.002f, 0.002f, 0.002f));
-    prog.uniform(3, scale); // set mvp matrix
-    prog.uniform(1, 0);
+    auto scale =
+        glm::scale(glm::vec3(0.002f, 0.002f, 0.002f)); // make cat fit on screen
+    prog.uniform(3, scale);                            // set mvp matrix
+    prog.uniform(8, 0);
 
     cat_batch.add(cat_sprite, glm::mat4());
     cat_batch.flush();

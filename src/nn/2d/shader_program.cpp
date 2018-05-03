@@ -41,6 +41,16 @@ bool shader_program::link() {
   // verify compilation succeeded
   return m_linked = status == GL_TRUE;
 }
+
+bool shader_program::valid() const {
+  glValidateProgram(m_program_id);
+
+  GLint status;
+  glGetProgramiv(m_program_id, GL_VALIDATE_STATUS, &status);
+
+  return status == GL_TRUE;
+}
+
 bool shader_program::is_linked() const {
   return m_linked;
 }

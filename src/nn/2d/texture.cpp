@@ -17,6 +17,16 @@ texture::texture(const image& img, texture::wrap wrap_mode)
 
   assert(static_cast<int>(img.channel()) == 4);
 
+  NN_GL_DEBUG(glBindTexture(GL_TEXTURE_2D, m_texture_id));
+
+  // setup filters
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  // upload texture
   NN_GL_DEBUG(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0,
                            GL_RGBA, GL_UNSIGNED_BYTE, std::data(img)));
 }

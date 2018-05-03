@@ -28,6 +28,7 @@ public:
   bool attach(const shader& s);
   bool link();
   bool is_linked() const;
+  bool valid() const;
 
   void bind() const;
   void unbind() const;
