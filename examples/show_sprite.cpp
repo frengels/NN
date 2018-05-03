@@ -21,32 +21,13 @@ int main(int argc, char** argv) {
   // after window because we need an opengl context first
   glewInit();
 
-  std::ifstream vert_shader_f("examples/shaders/basic.vert",
-                              std::ios::in | std::ios::ate);
-  assert(vert_shader_f.is_open());
-  auto vert_end = vert_shader_f.tellg();
-  vert_shader_f.seekg(0);
-  std::ifstream frag_shader_f("examples/shaders/basic.frag",
-                              std::ios::in | std::ios::ate);
-  assert(frag_shader_f.is_open());
-  auto frag_end = frag_shader_f.tellg();
-  frag_shader_f.seekg(0);
-
-  std::vector<char> vert_buff(vert_end);
-  std::vector<char> frag_buff(frag_end);
-
-  vert_shader_f.read(std::data(vert_buff), std::size(vert_buff));
-  frag_shader_f.read(std::data(frag_buff), std::size(frag_buff));
-  vert_buff.push_back('\0');
-  frag_buff.push_back('\0');
-
-  nn::shader vert_shader(GL_VERTEX_SHADER);
-  if (!vert_shader.compile(std::data(vert_buff))) {
+    nn::shader vert_shader(GL_VERTEX_SHADER);
+  if (!vert_shader.compile_file("examples/shaders/basic.vert")) {
     printf(vert_shader.log()->c_str());
     return EXIT_FAILURE;
   }
   nn::shader frag_shader(GL_FRAGMENT_SHADER);
-  if (!frag_shader.compile(std::data(frag_buff))) {
+  if (!frag_shader.compile_file("examples/shaders/basic.frag")) {
     printf(frag_shader.log()->c_str());
     return EXIT_FAILURE;
   }

@@ -17,7 +17,8 @@ public:
   ~shader();
   GLuint id() const;
 
-  bool compile(const std::string& src);
+  bool compile_source(const std::string_view src);
+  bool compile_file(const std::string_view file);
   std::optional<std::string> log() const;
 
   bool compiled() const;
