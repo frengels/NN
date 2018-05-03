@@ -38,6 +38,7 @@ bool shader_program::link() {
   m_unlinked_shaders.clear();
   m_unlinked_shaders.shrink_to_fit();
 
+  // verify compilation succeeded
   return m_linked = status == GL_TRUE;
 }
 bool shader_program::is_linked() const {
@@ -54,6 +55,10 @@ void shader_program::unbind() const {
 void shader_program::uniform(GLint location, const glm::mat4& m,
                              bool transpose) {
   NN_GL_DEBUG(glUniformMatrix4fv(location, 1, transpose, &m[0][0]));
+}
+
+void shader_program::uniform(GLint location, GLint i) {
+  NN_GL_DEBUG(glUniform1i(location, i));
 }
 
 bool shader_program::bind_attribute_location(const std::string& attr,

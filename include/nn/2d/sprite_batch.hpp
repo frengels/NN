@@ -8,6 +8,8 @@
 
 namespace nn {
 class sprite_batch {
+  using vertex_type = vertex2d;
+
 private:
   GLuint m_vertex_buffer;
   GLuint m_index_buffer;

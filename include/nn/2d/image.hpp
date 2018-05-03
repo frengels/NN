@@ -25,8 +25,11 @@ private:
   channels m_channels;
 
 public:
-  image(const std::string& filename, channels comp);
+  image();
   ~image();
+
+  bool load(const std::string& filename, channels comp);
+  void clear();
 
   size_t size() const;
   value_type* data();

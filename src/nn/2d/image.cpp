@@ -4,13 +4,38 @@
 #include <stb/stb_image.h>
 
 namespace nn {
-image::image(const std::string& filename, image::channels components) {
-  int file_channels;
-  m_image_data = stbi_load(filename.c_str(), &m_dimensions.x, &m_dimensions.y,
-                           &file_channels, static_cast<int>(components));
+image::image()
+    : m_image_data(nullptr)
+    , m_dimensions(glm::ivec2(0, 0))
+    , m_channels(nn::image::channels::DEFAULT) {
+}
 
-  if (components == image::channels::DEFAULT) {
-    m_channels = static_cast<image::channels>(file_channels);
+bool image::load(const std::string& filename, image::channels comp) {
+  clear();
+  int channels;
+  m_image_data = stbi_load(filename.c_str(), &m_dimensions.x, &m_dimensions.y,
+                           &channels, static_cast<int>(comp));
+
+  if (!m_image_data) {
+    clear();
+    return false;
+  }
+
+  if (comp == image::channels::DEFAULT) {
+    m_channels = static_cast<image::channels>(channels);
+  } else {
+    m_channels = comp;
+  }
+
+  return true;
+}
+
+void image::clear() {
+  // free last resource
+  if (m_image_data) {
+    stbi_image_free(m_image_data);
+    m_channels = channels::DEFAULT;
+    m_dimensions = glm::ivec2(0, 0);
   }
 }
 

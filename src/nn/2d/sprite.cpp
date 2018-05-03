@@ -17,6 +17,8 @@ sprite::sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect,
   // generate our vertices, these will simply be 2 triangles which cover our
   // rectangle
 
+  assert(tex->width() != 0 && tex->height() != 0);
+
   float tex_width = static_cast<float>(tex->width());
   float tex_height = static_cast<float>(tex->height());
 
@@ -34,13 +36,14 @@ sprite::sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect,
                         glm::vec2(tex_coord_x, tex_coord_y + tex_coord_h));
   // bottom right vertex, tex_coord x:1, y:1
   vertices.emplace_back(
-      glm::vec2(rect.width, 0.f),
+      glm::vec2(static_cast<float>(rect.width), 0.f),
       glm::vec2(tex_coord_x + tex_coord_w, tex_coord_y + tex_coord_h));
   // upper right vertex, tex_coord x:1, y:0
-  vertices.emplace_back(glm::vec2(rect.width, rect.height),
+  vertices.emplace_back(glm::vec2(static_cast<float>(rect.width),
+                                  static_cast<float>(rect.height)),
                         glm::vec2(tex_coord_x + tex_coord_w, tex_coord_y));
   // upper left, tex_coord x:0, y:0
-  vertices.emplace_back(glm::vec2(0.f, rect.height),
+  vertices.emplace_back(glm::vec2(0.f, static_cast<float>(rect.height)),
                         glm::vec2(tex_coord_x, tex_coord_y));
 
   // indices were already setup in the constructor

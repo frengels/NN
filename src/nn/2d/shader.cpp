@@ -17,6 +17,10 @@ shader::~shader() {
   }
 }
 
+GLuint shader::id() const {
+  return m_shader_id;
+}
+
 bool shader::compile(const std::string& src) {
   if (m_compiled) {
     return false;

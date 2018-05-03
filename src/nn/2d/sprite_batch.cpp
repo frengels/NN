@@ -8,7 +8,7 @@
 
 namespace nn {
 sprite_batch::sprite_batch() {
-  auto descriptions = vertex::description();
+  auto descriptions = vertex_type::description();
 
   // allocate buffers
   NN_GL_DEBUG(glGenBuffers(1, &m_vertex_buffer));
@@ -26,6 +26,7 @@ sprite_batch::sprite_batch() {
     NN_GL_DEBUG(glVertexAttribPointer(attr_descr.index, attr_descr.size,
                                       attr_descr.type, attr_descr.normalized,
                                       descriptions.stride, attr_descr.offset));
+    NN_GL_DEBUG(glBindVertexArray(0));
   }
 }
 
@@ -84,11 +85,16 @@ void sprite_batch::flush() {
 
   // TODO: map the texture etc
 
-  glActiveTexture(GL_TEXTURE0);
+  NN_GL_DEBUG(glActiveTexture(GL_TEXTURE0));
   m_sprites[0].second.texture->bind();
 
   NN_GL_DEBUG(glBindVertexArray(m_vertex_array_object));
   NN_GL_DEBUG(
       glDrawElements(GL_TRIANGLES, m_index_count, GL_UNSIGNED_SHORT, nullptr));
+
+  // clear our vectors
+  m_sprites.clear();
+  m_index_count = 0;
+  m_vertex_count = 0;
 }
 } // namespace nn

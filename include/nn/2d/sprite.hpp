@@ -15,19 +15,22 @@ namespace nn {
  */
 class sprite {
 public:
+  using vertex_type = vertex2d;
+  using index_type = GLushort;
+
 public:
   std::shared_ptr<nn::texture> texture;
   srectangle rect;
 
   glm::vec2 anchor;
 
-  std::vector<vertex2d> vertices;
-  std::vector<GLushort> indices;
+  std::vector<vertex_type> vertices;
+  std::vector<index_type> indices;
 
 public:
   sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect,
-         const glm::ivec2& anchor, const std::vector<vertex2d>& vertices,
-         const std::vector<GLushort>& indices);
+         const glm::ivec2& anchor, const std::vector<vertex_type>& vertices,
+         const std::vector<index_type>& indices);
   sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect,
          const glm::vec2& anchor);
   sprite(const std::shared_ptr<nn::texture>& tex, const srectangle& rect);

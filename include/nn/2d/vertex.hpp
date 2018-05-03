@@ -26,6 +26,8 @@ struct vertex2d {
   glm::vec2 tex_coords;
 
   vertex2d(const glm::vec2& position, const glm::vec2& tex_coords);
+
+  static vertex_description<2> description();
 };
 
 struct vertex {
