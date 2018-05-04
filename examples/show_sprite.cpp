@@ -83,8 +83,6 @@ int main(int argc, char** argv) {
     }
 
     prog.bind();
-    glActiveTexture(GL_TEXTURE0);
-    cat_tex->bind();
     auto scale =
         glm::scale(glm::vec3(0.002f, 0.002f, 0.002f)); // make cat fit on screen
 

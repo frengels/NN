@@ -161,6 +161,8 @@ void sprite_batch::flush(const shader_program& sp, const glm::mat4& mvp) {
     } else {
       draw_count = m_index_count - it->first;
     }
+    glActiveTexture(GL_TEXTURE0);
+    it->second->bind();
     glDrawElements(GL_TRIANGLES, draw_count, GL_UNSIGNED_SHORT,
                    reinterpret_cast<GLvoid*>(it->first));
   }
