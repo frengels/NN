@@ -25,7 +25,8 @@ private:
 
 public:
   texture(const image& img, wrap wrap_mode);
-  texture(const image& img);
+  explicit texture(const image& img);
+  explicit texture(const std::string_view file);
   ~texture();
 
   GLuint id() const;

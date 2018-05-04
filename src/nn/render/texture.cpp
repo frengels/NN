@@ -34,6 +34,10 @@ texture::texture(const image& img)
     : texture(img, wrap::REPEAT) {
 }
 
+texture::texture(const std::string_view file)
+    : texture(image(file, image::pixel_format::RGBA)) {
+}
+
 texture::~texture() {
   if (m_texture_id) {
     NN_GL_DEBUG(glDeleteTextures(1, &m_texture_id));
