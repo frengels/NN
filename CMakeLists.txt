@@ -16,6 +16,7 @@ set(OpenGL_GL_PREFERENCE GLVND)
 find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(EGL REQUIRED)
+find_package(spdlog REQUIRED)
 
 add_subdirectory(src/nn)
 add_subdirectory(examples)

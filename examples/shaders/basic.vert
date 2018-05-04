@@ -8,7 +8,7 @@ layout(location = 0) out highp vec2 v_tex_coord;
 layout(location = 3) uniform mat4 u_mvp;
 
 void main() {
-  //v_tex_coord = a_tex_coord;
   v_tex_coord = a_tex_coord;
+  //v_tex_coord = vec2(0.5, 0.5);
   gl_Position = u_mvp * vec4(a_position, 1.0);
 }

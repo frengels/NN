@@ -59,6 +59,8 @@ bool shader::compile_file(const std::string_view file) {
   file_stream.read(std::data(src_buffer), std::size(src_buffer));
   src_buffer.push_back('\0'); // add trailing null char
 
+  file_stream.close();
+
   return compile_source(std::data(src_buffer));
 }
 

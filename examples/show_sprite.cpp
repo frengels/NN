@@ -1,35 +1,26 @@
 #include <fstream>
+#include <iostream>
+#include <thread>
 #include <unistd.h>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/gtx/transform.hpp>
 
+#include "nn/fs/fs_monitor.hpp"
 #include "nn/render/2d/sprite.hpp"
 #include "nn/render/2d/sprite_batch.hpp"
 #include "nn/render/debug.hpp"
 #include "nn/render/shader_program.hpp"
 
-int main(int argc, char** argv) {
-  char buffer[FILENAME_MAX];
-  getcwd(buffer, FILENAME_MAX);
-
-  glfwInit();
-  GLFWwindow* window = glfwCreateWindow(800, 800, "Sprite", nullptr, nullptr);
-  glfwMakeContextCurrent(window);
-  glewExperimental = true;
-  // after window because we need an opengl context first
-  glewInit();
-
+nn::shader_program load_shaders() {
   nn::shader vert_shader(GL_VERTEX_SHADER);
   if (!vert_shader.compile_file("examples/shaders/basic.vert")) {
     printf(vert_shader.log()->c_str());
-    return EXIT_FAILURE;
   }
   nn::shader frag_shader(GL_FRAGMENT_SHADER);
   if (!frag_shader.compile_file("examples/shaders/basic.frag")) {
     printf(frag_shader.log()->c_str());
-    return EXIT_FAILURE;
   }
 
   nn::shader_program prog;
@@ -43,6 +34,29 @@ int main(int argc, char** argv) {
   if (!prog.valid()) {
     printf(prog.log()->c_str());
   }
+
+  return prog;
+}
+
+int main(int argc, char** argv) {
+  char buffer[FILENAME_MAX];
+  getcwd(buffer, FILENAME_MAX);
+
+  glfwInit();
+  GLFWwindow* window = glfwCreateWindow(800, 800, "Sprite", nullptr, nullptr);
+  glfwMakeContextCurrent(window);
+  glewExperimental = true;
+  // after window because we need an opengl context first
+  glewInit();
+
+  nn::shader_program prog = load_shaders();
+
+  nn::fs_monitor shader_watch;
+
+  shader_watch.watch("examples/shaders/basic.vert");
+  shader_watch.watch("examples/shaders/basic.frag");
+
+  shader_watch.run();
 
   nn::image cat_image;
   assert(
@@ -61,6 +75,13 @@ int main(int argc, char** argv) {
                         GL_STENCIL_BUFFER_BIT));
     glfwPollEvents();
 
+    nn::fs_event fs_event;
+    while (shader_watch.poll_events(fs_event)) {
+      if (fs_event.mask & IN_MODIFY) {
+        prog = load_shaders();
+      }
+    }
+
     prog.bind();
     glActiveTexture(GL_TEXTURE0);
     cat_tex->bind();
@@ -73,4 +94,6 @@ int main(int argc, char** argv) {
 
     glfwSwapBuffers(window);
   }
+
+  shader_watch.stop();
 }

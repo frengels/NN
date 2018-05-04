@@ -23,7 +23,12 @@ private:
 
 public:
   shader_program();
+  shader_program(const shader_program&) = delete;
+  shader_program(shader_program&& other);
   ~shader_program();
+
+  shader_program& operator=(const shader_program&) = delete;
+  shader_program& operator=(shader_program&& other);
 
   bool attach(const shader& s);
   bool link();

@@ -10,10 +10,28 @@ shader_program::shader_program()
     , m_linked(false) {
 }
 
+shader_program::shader_program(shader_program&& other)
+    : m_program_id(other.m_program_id)
+    , m_linked(other.m_linked)
+    , m_unlinked_shaders(std::move(other.m_unlinked_shaders)) {
+  other.m_linked = false;
+  other.m_program_id = 0;
+}
+
 shader_program::~shader_program() {
   if (m_program_id) {
     glDeleteShader(m_program_id);
   }
+}
+
+shader_program& shader_program::operator=(shader_program&& other) {
+  std::swap(m_linked, other.m_linked);
+  GLuint tmp = m_program_id;
+  m_program_id = other.m_program_id;
+  other.m_program_id = tmp;
+  std::swap(m_unlinked_shaders, other.m_unlinked_shaders);
+
+  return *this;
 }
 
 bool shader_program::attach(const shader& s) {
