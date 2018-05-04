@@ -59,10 +59,27 @@ bool fs_monitor::poll_events(fs_event& ev) {
 }
 
 void fs_monitor::_run_blocking() {
+
   while (!m_should_stop) {
+    // setup a timeout when reading
+    fd_set set;
+    FD_ZERO(&set);
+    FD_SET(m_inotify, &set);
+
+    struct timeval timeout;
+    timeout.tv_sec = 1;
+    timeout.tv_usec = 0;
+
+    int rv = select(m_inotify + 1, &set, nullptr, nullptr, &timeout);
+    if (rv == -1) {
+      m_logger->error("inotify error");
+    } else if (rv == 0) {
+      continue;
+    }
+
     char buffer[1024];
 
-    int num_bytes = read(m_inotify, buffer, 1024);
+    int num_bytes = read(m_inotify, buffer, std::size(buffer));
 
     char* p;
     struct inotify_event* ievent;

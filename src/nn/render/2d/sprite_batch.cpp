@@ -39,21 +39,30 @@ sprite_batch::~sprite_batch() {
   NN_GL_DEBUG(glDeleteBuffers(1, &m_index_buffer));
 }
 
-void sprite_batch::add(const nn::sprite& spr, const glm::mat4& transformation) {
+bool sprite_batch::add(const nn::sprite& spr, const glm::mat4& transformation) {
+  // this batch is full
+  if ((m_vertex_count + std::size(spr.geometry.vertices)) >
+      std::numeric_limits<GLushort>::max()) {
+    return false;
+  }
+
   m_vertex_count += spr.geometry.vertices.size();
   m_index_count += spr.geometry.indices.size();
   m_sprites.emplace_back(transformation, spr);
+  return true;
 }
 
 void sprite_batch::flush(const shader_program& sp, const glm::mat4& mvp) {
   if (std::empty(m_sprites)) {
     return;
   }
-  // calculate the total number of vertices
 
-  // TODO: buffer the vertices so that we don't have to wait with uploading
-  // whilst the last frame is drawing, probably using GL_MAP_UNSYNCHRONIZED_BIT
-  // map our vertex buffer first
+  // sort sprites for minimal rebinds
+  std::sort(std::begin(m_sprites), std::end(m_sprites),
+            [](const auto& lhs, const auto& rhs) -> bool {
+              return lhs.second.texture->id() < rhs.second.texture->id();
+            });
+
   NN_GL_DEBUG(glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer));
   NN_GL_DEBUG(glBufferData(GL_ARRAY_BUFFER, m_vertex_count * sizeof(vertex2d),
                            nullptr, GL_STREAM_DRAW));
@@ -70,7 +79,21 @@ void sprite_batch::flush(const shader_program& sp, const glm::mat4& mvp) {
   size_t distance_v = 0;
   size_t distance_i = 0;
 
+  // vector of indices where we have to change our texture including the texture
+  // to be bound
+  std::vector<std::pair<GLushort, texture*>> draw_indices;
+
+  if (!std::empty(m_sprites)) {
+    draw_indices.emplace_back(distance_i,
+                              m_sprites.front().second.texture.get());
+  }
+
   for (const auto& sprite_pair : m_sprites) {
+    // if we the sprite is not the same start a new draw call
+    if (sprite_pair.second.texture->id() != draw_indices.back().second->id()) {
+      draw_indices.emplace_back(distance_i, sprite_pair.second.texture.get());
+    }
+
     std::vector<vertex2d> vertices(
         std::size(sprite_pair.second.geometry.vertices));
     std::vector<GLushort> indices(
@@ -130,9 +153,21 @@ void sprite_batch::flush(const shader_program& sp, const glm::mat4& mvp) {
   m_sprites[0].second.texture->bind();
 
   NN_GL_DEBUG(glBindVertexArray(m_vertex_array_object));
+
+  for (auto it = std::begin(draw_indices); it != std::end(draw_indices); ++it) {
+    GLuint draw_count;
+    if ((it + 1) != std::end(draw_indices)) {
+      draw_count = (it + 1)->first - it->first;
+    } else {
+      draw_count = m_index_count - it->first;
+    }
+    glDrawElements(GL_TRIANGLES, draw_count, GL_UNSIGNED_SHORT,
+                   reinterpret_cast<GLvoid*>(it->first));
+  }
+  /*
   NN_GL_DEBUG(
       glDrawElements(GL_TRIANGLES, m_index_count, GL_UNSIGNED_SHORT, nullptr));
-
+*/
   // clear our vectors
   m_sprites.clear();
   m_index_count = 0;

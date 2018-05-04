@@ -25,7 +25,10 @@ public:
   sprite_batch();
   ~sprite_batch();
 
-  void add(const sprite& spr, const glm::mat4& transformation);
+  /**
+   * returns false when the batch is full
+   */
+  bool add(const sprite& spr, const glm::mat4& transformation);
   void flush(const shader_program& sp, const glm::mat4& mvp);
 };
 } // namespace nn
