@@ -58,6 +58,13 @@ int main(int argc, char** argv) {
 
   shader_watch.run();
 
+  nn::image cat2_image;
+  assert(
+      cat2_image.load("examples/textures/cat2.jpg", nn::image::channels::RGBA));
+  auto cat2_tex =
+      std::make_shared<nn::texture>(cat2_image, nn::texture::wrap::REPEAT);
+  nn::sprite cat2_sprite(cat2_tex);
+
   nn::image cat_image;
   assert(
       cat_image.load("examples/textures/cat.png", nn::image::channels::RGBA));
@@ -88,6 +95,7 @@ int main(int argc, char** argv) {
 
     cat_batch.add(cat_sprite, glm::mat4());
     cat_batch.add(cat_sprite, glm::translate(glm::vec3(100.f, 0.f, 0.f)));
+    cat_batch.add(cat2_sprite, glm::translate(glm::vec3(-100.f, 0.f, 0.f)));
     cat_batch.flush(prog, scale);
 
     glfwSwapBuffers(window);
