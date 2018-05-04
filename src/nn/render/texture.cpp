@@ -15,7 +15,7 @@ texture::texture(const image& img, texture::wrap wrap_mode)
   // set wrapping mode
   set_wrapping_mode(m_wrap);
 
-  assert(static_cast<int>(img.channel()) == 4);
+  assert(static_cast<int>(img.format()) == 4);
 
   NN_GL_DEBUG(glBindTexture(GL_TEXTURE_2D, m_texture_id));
 

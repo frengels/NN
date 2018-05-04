@@ -58,16 +58,12 @@ int main(int argc, char** argv) {
 
   shader_watch.run();
 
-  nn::image cat2_image;
-  assert(
-      cat2_image.load("examples/textures/cat2.jpg", nn::image::channels::RGBA));
+  nn::image cat2_image("examples/textures/cat2.jpg");
   auto cat2_tex =
       std::make_shared<nn::texture>(cat2_image, nn::texture::wrap::REPEAT);
   nn::sprite cat2_sprite(cat2_tex);
 
-  nn::image cat_image;
-  assert(
-      cat_image.load("examples/textures/cat.png", nn::image::channels::RGBA));
+  nn::image cat_image("examples/textures/cat.png");
   auto cat_tex =
       std::make_shared<nn::texture>(cat_image, nn::texture::wrap::REPEAT);
   nn::sprite cat_sprite(cat_tex);
