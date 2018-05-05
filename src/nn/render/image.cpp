@@ -8,8 +8,8 @@
 namespace nn {
 
 image_load_error::image_load_error(const std::string& filename)
-    : std::ios_base::failure(std::string("failed to load image: \"") +
-                             filename + "\"") {
+    : std::runtime_error(std::string("failed to load image: \"") + filename +
+                         "\"") {
 }
 
 image::image(const std::string_view filename, image::pixel_format f) {

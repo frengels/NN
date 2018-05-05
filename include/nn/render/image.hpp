@@ -1,13 +1,13 @@
 #pragma once
 
-#include <ios>
+#include <stdexcept>
 #include <string>
 
 #include <glm/glm.hpp>
 
 namespace nn {
 
-class image_load_error : public std::ios_base::failure {
+class image_load_error : public std::runtime_error {
 public:
   image_load_error(const std::string& file);
 };
