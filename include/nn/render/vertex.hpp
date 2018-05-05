@@ -5,6 +5,8 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
+#include "nn/render/vertex_traits.hpp"
+
 namespace nn {
 
 struct attribute_description {
@@ -31,6 +33,9 @@ struct vertex2d {
   static vertex_description<2> description();
 };
 
+template<>
+struct is_vertex<vertex2d> : public std::true_type {};
+
 struct vertex {
   glm::vec3 position;
   glm::vec2 tex_coords;
@@ -40,4 +45,7 @@ struct vertex {
 
   static vertex_description<2> description();
 };
+
+template<>
+struct is_vertex<vertex> : public std::true_type {};
 } // namespace nn
