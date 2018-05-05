@@ -10,7 +10,7 @@
 
 namespace nn {
 struct sprite_description {
-  srectangle rect;
+  stclip clip;
   glm::vec2 anchor;
   std::vector<vertex2d> vertices;
   std::vector<GLushort> indices;

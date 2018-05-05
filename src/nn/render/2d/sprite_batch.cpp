@@ -41,13 +41,13 @@ sprite_batch::~sprite_batch() {
 
 bool sprite_batch::add(const nn::sprite& spr, const glm::mat4& transformation) {
   // this batch is full
-  if ((m_vertex_count + std::size(spr.geometry.vertices)) >
+  if ((m_vertex_count + std::size(spr.mesh->vertices)) >
       std::numeric_limits<GLushort>::max()) {
     return false;
   }
 
-  m_vertex_count += spr.geometry.vertices.size();
-  m_index_count += spr.geometry.indices.size();
+  m_vertex_count += spr.mesh->vertices.size();
+  m_index_count += spr.mesh->indices.size();
   m_sprites.emplace_back(transformation, spr);
   return true;
 }
@@ -95,9 +95,8 @@ void sprite_batch::flush(const shader_program& sp, const glm::mat4& mvp) {
     }
 
     std::vector<vertex2d> vertices(
-        std::size(sprite_pair.second.geometry.vertices));
-    std::vector<GLushort> indices(
-        std::size(sprite_pair.second.geometry.indices));
+        std::size(sprite_pair.second.mesh->vertices));
+    std::vector<GLushort> indices(std::size(sprite_pair.second.mesh->indices));
 
     // get the dimensions of our texture so we can calculate translation for the
     // anchor
@@ -113,8 +112,8 @@ void sprite_batch::flush(const shader_program& sp, const glm::mat4& mvp) {
     auto transformation = sprite_pair.first * anchor_translation;
 
     // transform each vertex by the transformation matrix
-    std::transform(std::begin(sprite_pair.second.geometry.vertices),
-                   std::end(sprite_pair.second.geometry.vertices),
+    std::transform(std::begin(sprite_pair.second.mesh->vertices),
+                   std::end(sprite_pair.second.mesh->vertices),
                    std::begin(vertices), [&](const auto& v) -> auto {
                      auto res = v;
                      res.position =
@@ -122,8 +121,8 @@ void sprite_batch::flush(const shader_program& sp, const glm::mat4& mvp) {
                      return res;
                    });
 
-    std::transform(std::begin(sprite_pair.second.geometry.indices),
-                   std::end(sprite_pair.second.geometry.indices),
+    std::transform(std::begin(sprite_pair.second.mesh->indices),
+                   std::end(sprite_pair.second.mesh->indices),
                    std::begin(indices), [&](const auto& i) -> auto {
                      return i + distance_v;
                    });
