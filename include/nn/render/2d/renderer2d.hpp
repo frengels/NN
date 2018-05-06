@@ -2,7 +2,9 @@
 
 #include <vector>
 
+#include "nn/render/2d/render_batch.hpp"
 #include "nn/render/2d/renderable2d.hpp"
+#include "nn/stl/movable_object_pool.hpp"
 
 namespace nn {
 class renderer2d {
@@ -19,6 +21,7 @@ public:
 
 private:
   std::vector<render_info> m_renderables;
+  movable_object_pool<render_batch> m_batches;
 
 public:
   renderer2d() = default;

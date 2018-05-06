@@ -40,6 +40,7 @@ public:
   }
 
   void grow() {
+    // grow by a factor of 2
     size_t old_size = std::size(m_objects);
     size_t new_size = 2 * old_size;
     m_objects.resize(new_size);
