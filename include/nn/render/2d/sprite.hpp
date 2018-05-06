@@ -22,9 +22,9 @@ public:
 
 public:
   std::shared_ptr<nn::texture> texture;
-  std::shared_ptr<mesh_type> mesh;
+  mesh_type mesh;
 
-  stclip rect;
+  stclip clip;
 
   glm::vec2 anchor;
 
