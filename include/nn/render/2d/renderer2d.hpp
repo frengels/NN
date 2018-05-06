@@ -21,6 +21,8 @@ private:
   std::vector<render_info> m_renderables;
 
 public:
+  renderer2d() = default;
+
   void push(const std::shared_ptr<renderable_type>& r,
             const glm::mat4& transform, int z_layer, float z_offset);
   void flush();
