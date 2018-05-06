@@ -8,6 +8,7 @@ namespace nn {
 template<typename V, typename I>
 class mesh {
   static_assert(is_vertex<V>::value, "V must be a vertex type");
+
 public:
   using vertex_type = V;
   using index_type = I;
@@ -35,5 +36,6 @@ public:
   mesh(mesh&&) = default;
 
   mesh& operator=(const mesh&) = default;
+  mesh& operator=(mesh&&) = default;
 };
 } // namespace nn
