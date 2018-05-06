@@ -15,7 +15,7 @@ public:
   using index_type = GLushort;
   using mesh_type = mesh<vertex_type, index_type>;
 
-protected:
+public:
   mesh_type mesh;
   std::shared_ptr<nn::texture> texture;
 
