@@ -21,7 +21,7 @@ public:
 
 private:
   std::vector<render_info> m_renderables;
-  movable_object_pool<render_batch> m_batches;
+  movable_object_pool<render_batch> m_batch_pool;
 
 public:
   renderer2d() = default;
