@@ -7,6 +7,7 @@
 namespace nn {
 class render_batch {
   using renderable_type = renderable2d;
+  using mesh_type = renderable_type::mesh_type;
   using vertex_type = renderable_type::index_type;
   using index_type = renderable_type::vertex_type;
 
@@ -18,8 +19,21 @@ private:
   vertex_type* m_mapped_vertices;
   index_type* m_mapped_indices;
 
+  size_t m_num_vertices;
+  size_t m_num_indices;
+
 public:
   render_batch();
+  render_batch(render_batch&& other) noexcept;
   ~render_batch();
+
+  void begin(size_t v_size, size_t i_size);
+  void end();
+  void push(const mesh_type& mesh, const glm::mat4& transform);
+
+  size_t vertices_count() const;
+  size_t indices_count() const;
+
+  void flush();
 };
 } // namespace nn
