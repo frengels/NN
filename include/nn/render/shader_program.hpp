@@ -11,6 +11,12 @@
 
 namespace nn {
 class shader_program {
+public:
+  static constexpr int POSITION_LOCATION = 0;
+  static constexpr int TEXCOORD_LOCATION = 2;
+  static constexpr int SAMPLER_LOCATION = 8;
+  static constexpr int MVP_LOCATION = 3;
+
 private:
   GLuint m_program_id;
   bool m_linked;
