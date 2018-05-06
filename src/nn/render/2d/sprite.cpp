@@ -2,17 +2,15 @@
 
 namespace nn {
 sprite::sprite(const std::shared_ptr<nn::texture>& tex, const stclip& clip,
-               const glm::vec2& anchor, const std::vector<vertex2d>& vertices,
-               const std::vector<GLushort>& indices)
-    : texture{tex}
-    , mesh{vertices, indices}
-    , clip{clip}
-    , anchor{anchor} {
+               const glm::vec2& anchor, mesh_type&& mesh)
+    : renderable2d{mesh, tex}
+    , anchor{anchor}
+    , clip{clip} {
 }
 
 sprite::sprite(const std::shared_ptr<nn::texture>& tex, const stclip& clip,
                const glm::vec2& anchor)
-    : sprite(tex, clip, anchor, {}, {0, 1, 2, 0, 2, 3}) {
+    : sprite(tex, clip, anchor, mesh_type({}, {0, 1, 2, 0, 2, 3})) {
   // generate our vertices, these will simply be 2 triangles which cover our
   // rectangle
 

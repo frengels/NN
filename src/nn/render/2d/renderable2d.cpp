@@ -9,4 +9,8 @@ renderable2d::renderable2d(const mesh_type& mesh,
 
 renderable2d::~renderable2d() {
 }
+
+glm::vec2 renderable2d::origin() const {
+  return glm::vec2(0.f, 0.f);
+}
 } // namespace nn

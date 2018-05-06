@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 
+#include "nn/render/2d/renderable2d.hpp"
 #include "nn/render/mesh.hpp"
 #include "nn/render/texture.hpp"
 #include "nn/render/vertex.hpp"
@@ -14,24 +15,19 @@ namespace nn {
  * screen. It does not however contain any graphics specific code. That is
  * handled in the sprite renderer
  */
-class sprite {
+class sprite : public renderable2d {
 public:
-  using vertex_type = vertex2d;
-  using index_type = GLushort;
-  using mesh_type = nn::mesh<vertex_type, index_type>;
+  using renderable2d::index_type;
+  using renderable2d::mesh_type;
+  using renderable2d::vertex_type;
 
 public:
-  std::shared_ptr<nn::texture> texture;
-  mesh_type mesh;
-
-  stclip clip;
-
   glm::vec2 anchor;
+  stclip clip;
 
 public:
   sprite(const std::shared_ptr<nn::texture>& tex, const stclip& rect,
-         const glm::vec2& anchor, const std::vector<vertex_type>& vertices,
-         const std::vector<index_type>& indices);
+         const glm::vec2& anchor, mesh_type&& mesh);
   sprite(const std::shared_ptr<nn::texture>& tex, const stclip& rect,
          const glm::vec2& anchor);
   sprite(const std::shared_ptr<nn::texture>& tex, const stclip& rect);
