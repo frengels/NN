@@ -33,7 +33,7 @@ public:
       , indices(ifirst, ilast) {
   }
   mesh(const mesh&) = default;
-  mesh(mesh&&) = default;
+  mesh(mesh&&) noexcept = default;
 
   mesh& operator=(const mesh&) = default;
   mesh& operator=(mesh&&) = default;
