@@ -4,6 +4,8 @@
 
 #include <glm/gtx/transform.hpp>
 
+#include "nn/render/2d/renderable2d.hpp"
+
 namespace nn {
 void renderer2d::push(const renderable2d& r, const glm::mat4& transform,
                       int z_layer, float z_offset) {

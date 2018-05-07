@@ -5,6 +5,8 @@ set(RENDER_SRC
     debug.cpp
     shader.cpp
     shader_program.cpp
+    camera.cpp
+    2d/orthographic_camera.cpp
     2d/render_batch.cpp
     2d/sprite.cpp
     2d/renderable2d.cpp
