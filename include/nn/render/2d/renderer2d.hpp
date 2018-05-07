@@ -11,10 +11,18 @@ class renderer2d {
 public:
   struct render_info {
 
-    std::shared_ptr<renderable2d> renderable;
+    std::reference_wrapper<const renderable2d> renderable;
     glm::mat4 transformation;
     int z_layer;
     float z_offset;
+
+    render_info(const renderable2d& r, const glm::mat4& transform, int zlayer,
+                float zoffset)
+        : renderable{std::cref(r)}
+        , transformation{transform}
+        , z_layer{zlayer}
+        , z_offset{zoffset} {
+    }
   };
 
   using renderable_type = nn::renderable2d;
@@ -30,8 +38,8 @@ private:
 public:
   renderer2d() = default;
 
-  void push(const std::shared_ptr<renderable_type>& r,
-            const glm::mat4& transform, int z_layer, float z_offset);
+  void push(const renderable_type& r, const glm::mat4& transform, int z_layer,
+            float z_offset);
   void flush();
 };
 } // namespace nn

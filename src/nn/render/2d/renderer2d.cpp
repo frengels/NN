@@ -3,13 +3,9 @@
 #include <algorithm>
 
 namespace nn {
-void renderer2d::push(const std::shared_ptr<renderable2d>& r,
-                      const glm::mat4& transform, int z_layer, float z_offset) {
-  render_info info = {};
-  info.renderable = r;
-  info.transformation = transform;
-  info.z_layer = z_layer;
-  info.z_offset = z_offset;
+void renderer2d::push(const renderable2d& r, const glm::mat4& transform,
+                      int z_layer, float z_offset) {
+  render_info info{r, transform, z_layer, z_offset};
 
   m_renderables.push_back(info);
 }
@@ -26,8 +22,8 @@ void renderer2d::flush() {
             [](const auto& lhs, const auto& rhs) -> bool {
               if (lhs.z_layer == rhs.z_layer) {
                 if (lhs.z_offset == rhs.z_offset) {
-                  return lhs.renderable->texture->id() <
-                         rhs.renderable->texture->id();
+                  return lhs.renderable.get().texture->id() <
+                         rhs.renderable.get().texture->id();
                 }
                 return lhs.z_offset < rhs.z_offset;
               }
@@ -41,24 +37,24 @@ void renderer2d::flush() {
   size_t current_renderable_count = 0;
   size_t current_v_count = 0;
   size_t current_i_count = 0;
-  GLuint current_texture = m_renderables[0].renderable->texture->id();
+  GLuint current_texture = m_renderables[0].renderable.get().texture->id();
   texture_ids.push_back(current_texture);
   for (size_t i = 0; i < std::size(m_renderables); ++i) {
     const auto& render_info = m_renderables[i];
 
     // start new batch
-    if (render_info.renderable->texture->id() != current_texture) {
+    if (render_info.renderable.get().texture->id() != current_texture) {
       batch_sizes.emplace_back(std::make_tuple(
           current_renderable_count, current_v_count, current_i_count));
       current_renderable_count = 1;
-      current_v_count = std::size(render_info.renderable->mesh.vertices);
-      current_i_count = std::size(render_info.renderable->mesh.indices);
-      current_texture = render_info.renderable->texture->id();
+      current_v_count = std::size(render_info.renderable.get().mesh.vertices);
+      current_i_count = std::size(render_info.renderable.get().mesh.indices);
+      current_texture = render_info.renderable.get().texture->id();
       texture_ids.push_back(current_texture);
     } else {
       ++current_renderable_count;
-      current_v_count += std::size(render_info.renderable->mesh.vertices);
-      current_i_count += std::size(render_info.renderable->mesh.indices);
+      current_v_count += std::size(render_info.renderable.get().mesh.vertices);
+      current_i_count += std::size(render_info.renderable.get().mesh.indices);
     }
   }
 
@@ -80,7 +76,7 @@ void renderer2d::flush() {
     // iterate through our renderables
     for (size_t n = current_renderable_count;
          n < (std::get<0>(batch_sizes[i]) + current_renderable_count); ++n) {
-      current_batch->push(m_renderables[n].renderable->mesh,
+      current_batch->push(m_renderables[n].renderable.get().mesh,
                           m_renderables[n].transformation);
     }
 
