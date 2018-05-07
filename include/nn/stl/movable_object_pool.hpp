@@ -1,5 +1,6 @@
 #pragma once
 
+#include <queue>
 #include <type_traits>
 
 namespace nn {
@@ -28,7 +29,7 @@ public:
     auto index = m_free_objects.front();
     m_free_objects.pop();
 
-    return m_free_objects[index];
+    return &m_objects[index];
   }
 
   void release(T* object) {

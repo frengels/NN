@@ -13,7 +13,7 @@ class renderable2d {
 public:
   using vertex_type = vertex2d;
   using index_type = GLushort;
-  using mesh_type = mesh<vertex_type, index_type>;
+  using mesh_type = nn::mesh<vertex_type, index_type>;
 
 public:
   mesh_type mesh;
