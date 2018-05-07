@@ -23,6 +23,10 @@ private:
   std::vector<render_info> m_renderables;
   movable_object_pool<render_batch> m_batch_pool;
 
+  size_t m_batch_count;
+  size_t m_vertex_count;
+  size_t m_index_count;
+
 public:
   renderer2d() = default;
 
