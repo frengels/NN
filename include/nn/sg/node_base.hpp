@@ -51,5 +51,7 @@ public:
     // return a non owning pointer
     return res;
   }
+
+  bool destroy_child(node_base* node);
 };
 } // namespace nn
