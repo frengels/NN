@@ -21,8 +21,10 @@ public:
   using renderable2d::mesh_type;
   using renderable2d::vertex_type;
 
+private:
+  glm::vec2 m_anchor;
+
 public:
-  glm::vec2 anchor;
   stclip clip;
 
 public:
@@ -49,5 +51,8 @@ public:
   sprite(sprite&&) = default;
 
   sprite& operator=(const sprite&) = default;
+
+  const glm::vec2& anchor() const;
+  void set_anchor(const glm::vec2& a);
 };
 } // namespace nn

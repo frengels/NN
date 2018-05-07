@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
         glm::scale(glm::vec3(0.002f, 0.002f, 0.002f)); // make cat fit on screen
 
     sprite_renderer.push(*cat_sprite,
-                         glm::translate(glm::vec3(-100.f, 0.f, 0.f)), 0, 0.f);
+                         glm::translate(glm::vec3(-300.f, 0.f, 0.f)), 0, 0.f);
     sprite_renderer.push(*cat2_sprite, glm::mat4(), -1, 0.1f);
 
     prog.bind();

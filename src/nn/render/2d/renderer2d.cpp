@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+#include <glm/gtx/transform.hpp>
+
 namespace nn {
 void renderer2d::push(const renderable2d& r, const glm::mat4& transform,
                       int z_layer, float z_offset) {
@@ -79,12 +81,16 @@ void renderer2d::flush() {
     // iterate through our renderables
     for (size_t n = current_renderable_count;
          n < (std::get<0>(batch_sizes[i]) + current_renderable_count); ++n) {
-      current_batch->push(m_renderables[n].renderable.get().mesh,
-                          m_renderables[n].transformation);
+      current_batch->push(
+          m_renderables[n].renderable.get().mesh,
+          m_renderables[n].transformation *
+              glm::translate(
+                  glm::vec3(m_renderables[n].renderable.get().offset, 0.f)));
     }
 
     current_batch->end();
     batches.push_back(current_batch);
+    current_renderable_count += std::get<0>(batch_sizes[i]);
   }
 
   m_batch_count = std::size(batches);

@@ -17,13 +17,13 @@ public:
 
 public:
   mesh_type mesh;
+  glm::vec2 offset;
   std::shared_ptr<nn::texture> texture;
 
 public:
-  renderable2d(const mesh_type& mesh, const std::shared_ptr<nn::texture>& tex);
+  renderable2d(const mesh_type& mesh, const glm::vec2& offset,
+               const std::shared_ptr<nn::texture>& tex);
   renderable2d(renderable2d&&) noexcept = default;
   virtual ~renderable2d();
-
-  virtual glm::vec2 origin() const;
 };
 } // namespace nn
