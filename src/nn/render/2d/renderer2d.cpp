@@ -58,6 +58,9 @@ void renderer2d::flush() {
     }
   }
 
+  batch_sizes.push_back(std::make_tuple(current_renderable_count,
+                                        current_v_count, current_i_count));
+
   // set some queryable info
   m_vertex_count = current_v_count;
   m_index_count = current_i_count;

@@ -1,5 +1,7 @@
 #include "nn/render/2d/render_batch.hpp"
 
+#include <algorithm>
+
 #include "nn/render/shader_program.hpp"
 
 namespace nn {
@@ -19,6 +21,19 @@ render_batch::render_batch() {
     glVertexAttribPointer(descr.index, descr.size, descr.type, descr.normalized,
                           attr_descr.stride, descr.offset);
   }
+}
+
+render_batch::render_batch(render_batch&& other) noexcept
+    : m_vbo{other.m_vbo}
+    , m_ibo{other.m_ibo}
+    , m_vao{other.m_vao}
+    , m_mapped_vertices{other.m_mapped_vertices}
+    , m_mapped_indices{other.m_mapped_indices}
+    , m_num_vertices{other.m_num_vertices}
+    , m_num_indices{other.m_num_indices} {
+  other.m_vbo = 0;
+  other.m_ibo = 0;
+  other.m_vao = 0;
 }
 
 render_batch::~render_batch() {
@@ -61,6 +76,31 @@ void render_batch::end() {
   // for safety
   m_mapped_vertices = nullptr;
   m_mapped_indices = nullptr;
+}
+
+void render_batch::push(const mesh_type& mesh,
+                        const glm::mat4& transformation) {
+  std::vector<vertex_type> vertices(std::size(mesh.vertices));
+  std::vector<index_type> indices(std::size(mesh.indices));
+
+  std::transform(std::begin(mesh.vertices), std::end(mesh.vertices),
+                 std::begin(vertices), [&](const auto& v) -> vertex_type {
+                   auto res_v = v;
+                   res_v.position = glm::vec2(transformation *
+                                              glm::vec4(v.position, 0.f, 1.f));
+                   return res_v;
+                 });
+  std::transform(std::begin(mesh.indices), std::end(mesh.indices),
+                 std::begin(indices),
+                 [&](auto i) -> index_type { return i + m_num_vertices; });
+
+  std::copy(std::data(vertices), std::data(vertices) + std::size(vertices),
+            m_mapped_vertices + m_num_vertices);
+  m_num_vertices += std::size(vertices);
+
+  std::copy(std::data(indices), std::data(indices) + std::size(indices),
+            m_mapped_indices + m_num_indices);
+  m_num_indices += std::size(indices);
 }
 
 void render_batch::flush() {

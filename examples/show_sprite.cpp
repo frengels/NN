@@ -8,8 +8,8 @@
 #include <glm/gtx/transform.hpp>
 
 #include "nn/fs/fs_monitor.hpp"
+#include "nn/render/2d/renderer2d.hpp"
 #include "nn/render/2d/sprite.hpp"
-#include "nn/render/2d/sprite_batch.hpp"
 #include "nn/render/debug.hpp"
 #include "nn/render/shader_program.hpp"
 
@@ -59,12 +59,12 @@ int main(int argc, char** argv) {
   shader_watch.run();
 
   auto cat2_tex = std::make_shared<nn::texture>("examples/textures/cat2.jpg");
-  nn::sprite cat2_sprite(cat2_tex);
+  auto cat2_sprite(std::make_shared<nn::sprite>(cat2_tex));
 
   auto cat_tex = std::make_shared<nn::texture>("examples/textures/cat.png");
-  nn::sprite cat_sprite(cat_tex);
+  auto cat_sprite(std::make_shared<nn::sprite>(cat_tex));
 
-  nn::sprite_batch cat_batch;
+  nn::renderer2d sprite_renderer;
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -85,10 +85,13 @@ int main(int argc, char** argv) {
     auto scale =
         glm::scale(glm::vec3(0.002f, 0.002f, 0.002f)); // make cat fit on screen
 
-    cat_batch.add(cat_sprite, glm::mat4());
-    cat_batch.add(cat_sprite, glm::translate(glm::vec3(100.f, 0.f, 0.f)));
-    cat_batch.add(cat2_sprite, glm::translate(glm::vec3(-100.f, 0.f, 0.f)));
-    cat_batch.flush(prog, scale);
+    sprite_renderer.push(*cat_sprite,
+                         glm::translate(glm::vec3(-100.f, 0.f, 0.f)), 0, 0.f);
+    sprite_renderer.push(*cat2_sprite, glm::mat4(), -1, 0.1f);
+
+    prog.bind();
+    prog.uniform(nn::shader_program::MVP_LOCATION, scale);
+    sprite_renderer.flush();
 
     glfwSwapBuffers(window);
   }

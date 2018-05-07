@@ -15,7 +15,7 @@ private:
   std::queue<size_t> m_free_objects;
 
 public:
-  movable_object_pool(size_t initial_size = 0)
+  movable_object_pool(size_t initial_size = 10)
       : m_objects(initial_size) {
     for (size_t i = 0; i < std::size(m_objects); ++i) {
       m_free_objects.push(i);

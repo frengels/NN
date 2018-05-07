@@ -8,19 +8,19 @@ namespace nn {
 class render_batch {
   using renderable_type = renderable2d;
   using mesh_type = renderable_type::mesh_type;
-  using vertex_type = renderable_type::index_type;
-  using index_type = renderable_type::vertex_type;
+  using vertex_type = renderable_type::vertex_type;
+  using index_type = renderable_type::index_type;
 
 private:
   GLuint m_vbo;
   GLuint m_ibo;
   GLuint m_vao;
 
-  vertex_type* m_mapped_vertices;
-  index_type* m_mapped_indices;
+  vertex_type* m_mapped_vertices{nullptr};
+  index_type* m_mapped_indices{nullptr};
 
-  size_t m_num_vertices;
-  size_t m_num_indices;
+  size_t m_num_vertices{0};
+  size_t m_num_indices{0};
 
 public:
   render_batch();
