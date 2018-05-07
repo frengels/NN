@@ -32,6 +32,10 @@ const glm::mat4& node2d::local_transform() {
   return m_cached_local;
 }
 
+const node2d::transform_type& node2d::transformation() const {
+  return m_transform;
+}
+
 void node2d::translate(const glm::vec2& translation) {
   m_transform.position += translation;
   m_dirty = true;

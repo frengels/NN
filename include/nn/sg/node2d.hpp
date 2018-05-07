@@ -31,6 +31,8 @@ protected:
   virtual const glm::mat4& world_transform() override;
   virtual const glm::mat4& local_transform() override;
 
+  const transform_type& transformation() const;
+
   void translate(const glm::vec2& translation);
   void rotate(float angle);
   void scale(const glm::vec2& scale);
