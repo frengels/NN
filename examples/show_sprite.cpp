@@ -39,9 +39,6 @@ nn::shader_program load_shaders() {
 }
 
 int main(int argc, char** argv) {
-  char buffer[FILENAME_MAX];
-  getcwd(buffer, FILENAME_MAX);
-
   glfwInit();
   GLFWwindow* window = glfwCreateWindow(800, 800, "Sprite", nullptr, nullptr);
   glfwMakeContextCurrent(window);
