@@ -9,6 +9,7 @@ set(RENDER_SRC
     2d/orthographic_camera.cpp
     2d/render_batch.cpp
     2d/sprite.cpp
+    2d/packed_sprite.cpp
     2d/renderable2d.cpp
     2d/renderer2d.cpp
     2d/transform.cpp

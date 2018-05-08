@@ -5,7 +5,8 @@ sprite::sprite(const std::shared_ptr<nn::texture>& tex, const stclip& clip,
                const glm::vec2& anchor)
     : renderable2d(clip.generate_mesh<vertex_type, index_type>(*tex),
                    glm::vec2(), tex)
-    , m_clip(clip) {
+    , m_anchor{anchor}
+    , m_clip{clip} {
   set_anchor(m_anchor);
 }
 
