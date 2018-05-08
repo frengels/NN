@@ -23,6 +23,8 @@ public:
 public:
   renderable2d(const mesh_type& mesh, const glm::vec2& offset,
                const std::shared_ptr<nn::texture>& tex);
+  renderable2d(mesh_type&& mesh, const glm::vec2& offset,
+               const std::shared_ptr<nn::texture>& tex);
   renderable2d(renderable2d&&) noexcept = default;
   virtual ~renderable2d();
 };

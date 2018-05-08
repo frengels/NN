@@ -8,6 +8,13 @@ renderable2d::renderable2d(const mesh_type& mesh, const glm::vec2& offset,
     , texture{tex} {
 }
 
+renderable2d::renderable2d(mesh_type&& mesh, const glm::vec2& offset,
+                           const std::shared_ptr<nn::texture>& tex)
+    : mesh{std::move(mesh)}
+    , offset{offset}
+    , texture{tex} {
+}
+
 renderable2d::~renderable2d() {
 }
 } // namespace nn
