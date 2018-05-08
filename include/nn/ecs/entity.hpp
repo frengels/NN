@@ -7,5 +7,7 @@ struct entity {
   uint32_t id;
   uint16_t version;
   bool valid;
+
+  operator bool() const noexcept;
 };
 } // namespace nn
