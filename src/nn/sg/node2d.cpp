@@ -47,7 +47,8 @@ void node2d::rotate(float angle) {
 }
 
 void node2d::scale(const glm::vec2& scale) {
-  m_transform.scale *= scale;
+  m_transform.scale.x *= scale.x;
+  m_transform.scale.y *= scale.y;
   m_dirty = true;
 }
 } // namespace nn
