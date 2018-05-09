@@ -1,0 +1,6 @@
+function(nn_add_test target)
+  add_executable(${target} ${ARGN})
+  target_include_directories(${target} PRIVATE ${CMAKE_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
+  target_link_libraries(${target} ${Boost_LIBRARIES})
+  add_test(${target} ${target})
+endfunction()

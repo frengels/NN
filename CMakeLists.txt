@@ -17,6 +17,8 @@ find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(EGL REQUIRED)
 find_package(spdlog REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 add_subdirectory(src/nn)
 add_subdirectory(examples)
+add_subdirectory(tests)
