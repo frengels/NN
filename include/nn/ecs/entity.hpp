@@ -17,9 +17,18 @@ public:
   bool valid{false};
 
   entity() = default;
+  entity(id_type id, version_type v, bool valid = true)
+      : id{id}
+      , version{v}
+      , valid{valid} {
+  }
 
-  operator bool() const noexcept;
+  operator bool() const noexcept {
+    return !valid || id == INVALID_ID;
+  }
 
-  bool operator==(const entity& other) const noexcept;
+  bool operator==(const entity& other) const noexcept {
+    return id == other.id && version == other.version && valid == other.valid;
+  }
 };
 } // namespace nn

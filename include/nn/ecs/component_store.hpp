@@ -14,11 +14,9 @@ class component_store {
 public:
   using entity_type = nn::entity;
   using key_type = entity_type;
-  using component_type = component<C>;
-  using value_type = component_type;
-  using store_type = std::vector<C>;
-
-  static constexpr size_t INVALID_HANDLE = std::numeric_limits<size_t>::max();
+  using component_type = C;
+  using value_type = component<component_type>;
+  using store_type = std::vector<value_type>;
 
 private:
   /**
@@ -39,7 +37,7 @@ public:
     _check_size(ent);
 
     // insert into the back and take that index for our entry
-    m_components.push_back(c);
+    m_components.push_back(component<C>(ent, c));
     auto index = std::size(m_components) - 1;
     m_entries[ent.id] = static_cast<entity_type::id_type>(index);
   }
@@ -49,7 +47,7 @@ public:
     assert(ent);
     _check_size(ent);
 
-    m_components.emplace_back(std::forward<Args>(args)...);
+    m_components.emplace_back(ent, std::forward<Args>(args)...);
     auto index = std::size(m_components) - 1;
     m_entries[ent.id] = static_cast<entity_type::id_type>(index);
   }
@@ -59,9 +57,9 @@ public:
     auto dense_index = m_entries[ent.id];
   }
 
-  void contains(const entity& ent) {
+  bool contains(const entity& ent) {
     auto handle = m_entries[ent.id];
-    if (handle == INVALID_HANDLE) {
+    if (handle == entity::INVALID_ID) {
       return false;
     } else {
       return m_components[handle].key() == ent;
@@ -72,7 +70,7 @@ private:
   inline void _check_size(const entity& ent) {
     if ((ent.id) >= std::size(m_entries)) {
       // initialize with invalid handle
-      m_entries.resize(ent.id, INVALID_HANDLE);
+      m_entries.resize(static_cast<size_t>(ent.id), entity::INVALID_ID);
     }
   }
 };

@@ -10,17 +10,17 @@ struct component {
   using key_type = nn::entity;
 
   key_type m_entity;
-  component_type component;
+  component_type value;
 
   component(const entity& ent, const component_type& c)
       : m_entity(ent)
-      , component(c) {
+      , value(c) {
   }
 
   template<typename... Args>
   component(const entity& ent, Args... args)
       : m_entity(ent)
-      , component(std::forward<Args>(args)...) {
+      , value(std::forward<Args>(args)...) {
   }
 
   const nn::entity& entity() const {

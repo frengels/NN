@@ -4,3 +4,5 @@ function(nn_add_test target)
   target_link_libraries(${target} ${Boost_LIBRARIES})
   add_test(${target} ${target})
 endfunction()
+
+nn_add_test(test_component_store test_component_store.cpp)

@@ -17,6 +17,7 @@ find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(EGL REQUIRED)
 find_package(spdlog REQUIRED)
+set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 add_subdirectory(src/nn)
