@@ -7,10 +7,6 @@ template<typename T>
 class pop_vector : public std::vector<T> {
 public:
   using parent_type = std::vector<T>;
-  using parent_type::emplace_back;
-  using parent_type::iterator;
-  using parent_type::parent_type;
-  using parent_type::push_back;
 
 public:
   /**
