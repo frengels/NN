@@ -23,4 +23,9 @@ BOOST_AUTO_TEST_CASE(insert_remove) {
   test_component test1(73, "Trinky");
 
   test_store.push(test_entity, test1);
+
+  auto test1_ptr = test_store.get(test_entity);
+
+  BOOST_REQUIRE(test1.bestint == test1_ptr->bestint);
+  BOOST_REQUIRE(test1.meme.compare(test1_ptr->meme) == 0);
 }

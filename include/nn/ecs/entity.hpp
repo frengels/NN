@@ -24,7 +24,7 @@ public:
   }
 
   operator bool() const noexcept {
-    return !valid || id == INVALID_ID;
+    return id != INVALID_ID && valid;
   }
 
   bool operator==(const entity& other) const noexcept {

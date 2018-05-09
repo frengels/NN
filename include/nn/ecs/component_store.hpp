@@ -86,7 +86,7 @@ private:
   inline void _check_size(const entity& ent) {
     if ((ent.id) >= std::size(m_entries)) {
       // initialize with invalid handle
-      m_entries.resize(static_cast<size_t>(ent.id), entity::INVALID_ID);
+      m_entries.resize(static_cast<size_t>(ent.id + 1), entity::INVALID_ID);
     }
   }
 };
