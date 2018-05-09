@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cassert>
+#include <vector>
 
 #include "nn/ecs/component.hpp"
 #include "nn/ecs/entity.hpp"
@@ -55,6 +56,21 @@ public:
   void remove(const entity& ent) {
     assert(ent.id);
     auto dense_index = m_entries[ent.id];
+  }
+
+  component_type* get(const entity_type& e) {
+    if (e.id >= std::size(m_entries)) {
+      return nullptr;
+    }
+
+    auto dense_index = m_entries[e.id];
+
+    if (dense_index == entity::INVALID_ID) {
+      return nullptr;
+    }
+
+    auto& component = m_components[dense_index];
+    return &component.value;
   }
 
   bool contains(const entity& ent) {
