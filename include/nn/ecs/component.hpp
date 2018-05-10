@@ -9,7 +9,10 @@ struct component {
   using value_type = component_type;
   using key_type = nn::entity;
 
+private:
   key_type m_entity;
+
+public:
   component_type value;
 
   component(const entity& ent, const component_type& c)

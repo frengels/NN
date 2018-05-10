@@ -53,6 +53,13 @@ public:
     std::get<component_store<C>>(m_component_stores).push(ent, component);
   }
 
+  template<typename C>
+  void remove(const nn::entity& ent) {
+    assert(valid(ent));
+
+    std::get<component_store<C>>(m_component_stores).remove(ent);
+  }
+
   template<typename C, typename... Args>
   void attach_emplace(const nn::entity& ent, Args&&... args) {
     assert(valid(ent));

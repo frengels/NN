@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <cassert>
 #include <vector>
 
@@ -54,6 +55,25 @@ public:
   void remove(const entity& ent) {
     assert(ent.id);
     auto dense_index = m_entries[ent.id];
+
+    // swap element to be removed with the last element
+    std::iter_swap(std::begin(m_components) + dense_index,
+                   std::rbegin(m_components));
+
+    m_components.pop_back();
+
+    // get iterator of swapped component
+    auto swapped_it = std::begin(m_components) + dense_index;
+
+    m_entries[ent.id] = nn::entity::INVALID_ID;
+
+    if (swapped_it >= std::end(m_components)) {
+      return;
+    }
+
+    auto component_entity = swapped_it->entity();
+    // make everything reference correctly again
+    m_entries[component_entity.id] = dense_index;
   }
 
   component_type* get(const entity_type& e) {
