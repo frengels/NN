@@ -20,6 +20,9 @@ public:
       : id{id}
       , version{v} {
   }
+  entity(const entity&) = default;
+
+  entity& operator=(const entity&) = default;
 
   bool operator==(const entity& other) const noexcept {
     return id == other.id && version == other.version;
