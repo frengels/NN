@@ -45,6 +45,16 @@ public:
     }
   }
 
+  void destroy(const nn::entity& ent) {
+    assert(valid(ent));
+
+    // remove all components from stores
+    (remove<Components>(ent), ...);
+    // increment version to invalidate all remaining entities
+    m_entities[ent] = ent.version + 1;
+    m_free_index.push(ent.id);
+  }
+
   template<typename C>
   void attach(const nn::entity& ent, const C& component) {
     // crash if invalid entity
