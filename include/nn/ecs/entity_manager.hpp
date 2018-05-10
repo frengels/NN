@@ -66,8 +66,11 @@ public:
   }
 
   bool valid(const nn::entity& ent) {
-    auto current_version = m_entities[ent.id];
+    if (std::size(m_entities) <= ent.id) {
+      return false;
+    }
 
+    auto current_version = m_entities[ent.id];
     return current_version == ent.version;
   }
 };
