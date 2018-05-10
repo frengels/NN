@@ -18,7 +18,7 @@ struct test_component {
 BOOST_AUTO_TEST_CASE(insert_remove) {
   nn::component_store<test_component> test_store;
 
-  nn::entity test_entity(0, 0, true);
+  nn::entity test_entity(0, 0);
 
   test_component test1(73, "Trinky");
 

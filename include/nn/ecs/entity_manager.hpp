@@ -50,18 +50,19 @@ public:
     // crash if invalid entity
     assert(valid(ent));
 
-    std::get<C>(m_component_stores).push(ent, component);
+    std::get<component_store<C>>(m_component_stores).push(ent, component);
   }
 
   template<typename C, typename... Args>
   void attach_emplace(const nn::entity& ent, Args&&... args) {
     assert(valid(ent));
-    std::get<C>(m_component_stores).emplace(ent, std::forward<Args>(args)...);
+    std::get<component_store<C>>(m_component_stores)
+        .emplace(ent, std::forward<Args>(args)...);
   }
 
   template<typename C>
   C* get(const nn::entity& ent) {
-    return std::get<C>(m_component_stores).get(ent);
+    return std::get<component_store<C>>(m_component_stores).get(ent);
   }
 
   bool valid(const nn::entity& ent) {

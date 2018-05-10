@@ -34,7 +34,6 @@ public:
   void push(const entity& ent, const component_type& c) {
     // make sure the entity is valid
     // should be disabled in release mode
-    assert(ent);
     _check_size(ent);
 
     // insert into the back and take that index for our entry
@@ -45,7 +44,6 @@ public:
 
   template<typename... Args>
   void emplace(const entity& ent, Args&&... args) {
-    assert(ent);
     _check_size(ent);
 
     m_components.emplace_back(ent, std::forward<Args>(args)...);
