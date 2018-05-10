@@ -53,12 +53,14 @@ public:
   }
 
   void remove(const entity& ent) {
-    assert(ent.id);
+    assert(ent.id != nn::entity::INVALID_ID);
     auto dense_index = m_entries[ent.id];
+
+    assert(dense_index != nn::entity::INVALID_ID);
 
     // swap element to be removed with the last element
     std::iter_swap(std::begin(m_components) + dense_index,
-                   std::rbegin(m_components));
+                   std::end(m_components) - 1);
 
     m_components.pop_back();
 
@@ -98,6 +100,10 @@ public:
     } else {
       return m_components[handle].key() == ent;
     }
+  }
+
+  size_t size() const {
+    return std::size(m_components);
   }
 
 private:

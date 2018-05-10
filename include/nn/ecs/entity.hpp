@@ -1,7 +1,7 @@
 #pragma once
 
+#include <cstdint>
 #include <limits>
-#include <stdint.h>
 
 namespace nn {
 struct entity {

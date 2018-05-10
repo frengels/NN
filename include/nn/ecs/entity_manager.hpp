@@ -72,6 +72,11 @@ public:
     return std::get<component_store<C>>(m_component_stores).get(ent);
   }
 
+  template<typename C>
+  size_t size() const {
+    return std::size(std::get<component_store<C>>(m_component_stores));
+  }
+
   bool valid(const nn::entity& ent) {
     if (std::size(m_entities) <= ent.id) {
       return false;
