@@ -28,7 +28,7 @@ bool shader::compile_source(const std::string_view src) {
   }
 
   const char* src_cstr = std::data(src);
-  const GLint length = std::size(src);
+  const GLint length = static_cast<GLint>(std::size(src));
   NN_GL_DEBUG(glShaderSource(m_shader_id, 1, &src_cstr, &length));
   NN_GL_DEBUG(glCompileShader(m_shader_id));
 
@@ -73,8 +73,8 @@ std::optional<std::string> shader::log() const {
   }
 
   std::vector<GLchar> info_log(length);
-  glGetShaderInfoLog(m_shader_id, std::size(info_log), &length,
-                     std::data(info_log));
+  glGetShaderInfoLog(m_shader_id, static_cast<GLsizei>(std::size(info_log)),
+                     &length, std::data(info_log));
 
   return std::string(std::data(info_log));
 }

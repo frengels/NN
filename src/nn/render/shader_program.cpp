@@ -118,8 +118,8 @@ std::optional<std::string> shader_program::log() const {
   }
 
   std::vector<GLchar> info_log(length);
-  glGetProgramInfoLog(m_program_id, std::size(info_log), &length,
-                      std::data(info_log));
+  glGetProgramInfoLog(m_program_id, static_cast<GLsizei>(std::size(info_log)),
+                      &length, std::data(info_log));
 
   return std::string(std::data(info_log));
 }

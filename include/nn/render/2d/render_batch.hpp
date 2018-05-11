@@ -19,8 +19,8 @@ private:
   vertex_type* m_mapped_vertices{nullptr};
   index_type* m_mapped_indices{nullptr};
 
-  size_t m_num_vertices{0};
-  size_t m_num_indices{0};
+  GLsizei m_num_vertices{0};
+  GLsizei m_num_indices{0};
 
 public:
   render_batch();
