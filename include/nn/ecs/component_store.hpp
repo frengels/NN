@@ -19,6 +19,8 @@ public:
   using component_type = C;
   using value_type = component<component_type>;
   using store_type = std::vector<value_type>;
+  using iterator = store_type::iterator;
+  using const_iterator = store_type::const_iterator;
 
 private:
   /**
@@ -32,6 +34,22 @@ private:
   std::vector<entity_type::id_type> m_entries;
 
 public:
+  iterator begin() {
+    return std::begin(m_components);
+  }
+
+  iterator end() {
+    return std::end(m_components);
+  }
+
+  const_iterator cbegin() const {
+    return std::cbegin(m_components);
+  }
+
+  const_iterator cend() const {
+    return std::cend(m_components);
+  }
+
   void push(const entity& ent, const component_type& c) {
     // make sure the entity is valid
     // should be disabled in release mode
