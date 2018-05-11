@@ -27,8 +27,10 @@ texture::texture(const image& img, texture::wrap wrap_mode)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
   // upload texture
-  NN_GL_DEBUG(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0,
-                           GL_RGBA, GL_UNSIGNED_BYTE, std::data(img)));
+  NN_GL_DEBUG(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+                           static_cast<GLsizei>(m_width),
+                           static_cast<GLsizei>(m_height), 0, GL_RGBA,
+                           GL_UNSIGNED_BYTE, std::data(img)));
 }
 texture::texture(const image& img)
     : texture(img, wrap::REPEAT) {
