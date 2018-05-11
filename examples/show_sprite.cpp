@@ -1,7 +1,6 @@
 #include <fstream>
 #include <iostream>
 #include <thread>
-#include <unistd.h>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -9,6 +8,7 @@
 
 #if defined(__linux__)
 #include "nn/fs/fs_monitor.hpp"
+#include <unistd.h>
 #endif
 #include "nn/render/2d/renderer2d.hpp"
 #include "nn/render/2d/sprite.hpp"
