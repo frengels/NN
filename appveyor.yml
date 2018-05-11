@@ -8,7 +8,6 @@ platform:
 environment:
   matrix:
   - arch: Win64
-  - APPVEYOR_SAVE_CACHE_ON_ERROR: true
 
 matrix:
   fast_finish: true
