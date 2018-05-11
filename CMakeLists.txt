@@ -22,7 +22,7 @@ set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 # temporary workaround for windows
-find_path(STBI_INCLUDE_DIR stb/stb_image.h)
+find_path(STBI_INCLUDE_DIR stb_image.h)
 
 add_subdirectory(src/nn)
 add_subdirectory(examples)
