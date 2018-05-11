@@ -23,7 +23,7 @@ before_build:
 - cmd: |-
     vcpkg install glew:x64-windows
     vcpkg install spdlog:x64-windows
-    vcpkg install boost:x64-windows
+    vcpkg install boost-test:x64-windows
     mkdir build
     cd build
     cmake --version
