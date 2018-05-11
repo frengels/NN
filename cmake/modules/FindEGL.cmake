@@ -1,87 +1,88 @@
 #.rst:
-# FindEGL
-# -------
+# Find EGL
+# --------
 #
-# Find the EGL library.
+# Finds the EGL library. This module defines:
 #
-# Imported Targets
-# ^^^^^^^^^^^^^^^^
+#  EGL_FOUND            - True if EGL library is found
+#  EGL::EGL             - EGL imported target
 #
-# This module defines the following :prop_tgt:`IMPORTED` targets:
+# Additionally these variables are defined for internal usage:
 #
-# ``EGL::EGL``
-#   The EGL library, if found.
+#  EGL_LIBRARY          - EGL library
+#  EGL_INCLUDE_DIR      - Include dir
 #
-# ``EGL::OpenGL``
-#   The OpenGL library, if found.
+
 #
-# Result Variables
-# ^^^^^^^^^^^^^^^^
+#   This file is part of Magnum.
 #
-# This module will set the following variables in your project:
+#   Copyright © 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018
+#             Vladimír Vondruš <mosra@centrum.cz>
 #
-# ``EGL_FOUND``
-#   System has the EGL library.
-# ``EGL_INCLUDE_DIR``
-#   The EGL include directory.
-# ``EGL_LIBRARY``
-#   The libEGL library.
-# ``EGL_LIBRARIES``
-#   All EGL related libraries, including ``EGL_LIBRARY``.
+#   Permission is hereby granted, free of charge, to any person obtaining a
+#   copy of this software and associated documentation files (the "Software"),
+#   to deal in the Software without restriction, including without limitation
+#   the rights to use, copy, modify, merge, publish, distribute, sublicense,
+#   and/or sell copies of the Software, and to permit persons to whom the
+#   Software is furnished to do so, subject to the following conditions:
 #
-# Hints
-# ^^^^^
+#   The above copyright notice and this permission notice shall be included
+#   in all copies or substantial portions of the Software.
 #
-# Set `EGL_ROOT_DIR` to the root directory of an EGL installation.
-find_path(EGL_INCLUDE_DIR
-  NAMES
+#   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+#   THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+#   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+#   DEALINGS IN THE SOFTWARE.
+#
+
+# Library
+if(NOT CORRADE_TARGET_EMSCRIPTEN)
+    find_library(EGL_LIBRARY NAMES
+        EGL
+
+        # ANGLE (CMake doesn't search for lib prefix on Windows)
+        libEGL
+
+        # On iOS a part of OpenGLES
+        OpenGLES)
+    set(EGL_LIBRARY_NEEDED EGL_LIBRARY)
+endif()
+
+# Include dir
+find_path(EGL_INCLUDE_DIR NAMES
     EGL/egl.h
-  PATHS
-    ${EGL_ROOT_DIR}/include
-    /usr/local/include
-    /usr/include)
 
-find_library(EGL_LIBRARY
-  NAMES
-    EGL
-  PATHS
-    ${EGL_ROOT_DIR}/lib
-    /usr/local/lib
-    /usr/lib)
-
-find_library(EGL_opengl_LIBRARY
-  NAMES
-   OpenGL
-  PATHS
-    ${EGL_ROOT_DIR}/lib
-    /usr/local/lib
-    /usr/lib)
-
-set(EGL_LIBRARIES ${EGL_LIBRARY} ${EGL_opengl_LIBRARY})
+    # iOS
+    EAGL.h)
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(
-  EGL DEFAULT_MSG
-  EGL_LIBRARY EGL_opengl_LIBRARY EGL_INCLUDE_DIR)
-mark_as_advanced(EGL_ROOT_DIR EGL_INCLUDE_DIR EGL_LIBRARY EGL_opengl_LIBRARY)
+find_package_handle_standard_args(EGL DEFAULT_MSG
+    ${EGL_LIBRARY_NEEDED}
+    EGL_INCLUDE_DIR)
 
-if(EGL_FOUND)
-  if(NOT TARGET EGL::OpenGL)
-    add_library(EGL::OpenGL UNKNOWN IMPORTED)
-    set_target_properties(EGL::OpenGL PROPERTIES
-      INTERFACE_INCLUDE_DIRECTORIES "${EGL_INCLUDE_DIR}")
-    set_target_properties(EGL::OpenGL PROPERTIES
-      IMPORTED_LINK_INTERFACE_LANGUAGES "C"
-      IMPORTED_LOCATION "${EGL_opengl_LIBRARY}")
-  endif()
+if(NOT TARGET EGL::EGL)
+    if(EGL_LIBRARY_NEEDED)
+        # Work around BUGGY framework support on macOS
+        # http://public.kitware.com/pipermail/cmake/2016-April/063179.html
+        if(APPLE AND ${EGL_LIBRARY} MATCHES "\\.framework$")
+            add_library(EGL::EGL INTERFACE IMPORTED)
+            set_property(TARGET EGL::EGL APPEND PROPERTY
+                INTERFACE_LINK_LIBRARIES ${EGL_LIBRARY})
+        else()
+            add_library(EGL::EGL UNKNOWN IMPORTED)
+            set_property(TARGET EGL::EGL PROPERTY
+                IMPORTED_LOCATION ${EGL_LIBRARY})
+        endif()
+    else()
+        # This won't work in CMake 2.8.12, but that affects Emscripten only so
+        # I assume people building for that are not on that crap old Ubuntu
+        # 14.04 LTS
+        add_library(EGL::EGL INTERFACE IMPORTED)
+    endif()
 
-  if(NOT TARGET EGL::EGL)
-    add_library(EGL::EGL UNKNOWN IMPORTED)
     set_target_properties(EGL::EGL PROPERTIES
-      INTERFACE_INCLUDE_DIRECTORIES "${EGL_INCLUDE_DIR}")
-    set_target_properties(EGL::EGL PROPERTIES
-      IMPORTED_LINK_INTERFACE_LANGUAGES "C"
-      INTERFACE_LINK_LIBRARIES "EGL::OpenGL"
-      IMPORTED_LOCATION "${EGL_LIBRARY}")
-  endif()
+        INTERFACE_INCLUDE_DIRECTORIES ${EGL_INCLUDE_DIR})
 endif()
