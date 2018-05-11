@@ -29,7 +29,7 @@ before_build:
     mkdir build
     cd build
     cmake --version
-    cmake .. -G %generator%
+    cmake .. -DCMAKE_TOOLCHAIN_FILE=c:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake -G %generator%
 
 build:
   project: c:\projects\cmake-init\build\NN.sln
