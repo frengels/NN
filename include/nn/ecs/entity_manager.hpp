@@ -12,6 +12,10 @@ namespace nn {
 template<typename... Components>
 class entity_manager {
   using entity_type = nn::entity;
+  using tuple_type = std::tuple<component_store<Components>...>;
+
+  template<typename C>
+  using store_type = component_store<C>;
 
   template<typename C>
   using component_iterator = typename component_store<C>::iterator;
@@ -22,7 +26,7 @@ private:
   std::vector<uint32_t> m_entities;
   std::priority_queue<uint32_t> m_free_index;
 
-  std::tuple<component_store<Components>...> m_component_stores;
+  tuple_type m_component_stores;
 
 public:
   entity_manager() = default;

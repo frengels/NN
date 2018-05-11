@@ -1,6 +1,7 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 
+#include "nn/ecs/ecs_traits.hpp"
 #include "nn/ecs/entity_handle.hpp"
 #include "nn/ecs/entity_manager.hpp"
 
@@ -9,6 +10,10 @@ struct entity_manager_fixture {
   nn::entity entity1;
   nn::entity entity2;
   nn::entity entity3;
+
+  static_assert(
+      nn::entity_manager_has_component<float, decltype(test_manager)>::value,
+      "entity manager does not contain float");
 
   entity_manager_fixture() {
     entity1 = test_manager.create();
