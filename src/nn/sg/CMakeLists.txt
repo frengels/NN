@@ -4,4 +4,4 @@ set(SG_SRC
     scene.cpp)
 
 add_library(sg ${SG_SRC})
-target_include_directories(sg PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(sg PRIVATE glm ${CMAKE_SOURCE_DIR}/include)
