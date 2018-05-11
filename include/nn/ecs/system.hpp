@@ -26,7 +26,8 @@ public:
 };
 
 template<typename EntityManager, typename ComponentFunc>
-nn::system<EntityManager, ComponentFunc> make_system(ComponentFunc func) {
+nn::system<EntityManager, ComponentFunc>
+make_system([[maybe_unused]] const EntityManager& manager, ComponentFunc func) {
   return nn::system<EntityManager, ComponentFunc>(func);
 }
 } // namespace nn

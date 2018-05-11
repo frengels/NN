@@ -45,13 +45,13 @@ BOOST_AUTO_TEST_CASE(iterate_components) {
 
 // test iteration with a system
 BOOST_AUTO_TEST_CASE(system_iteration) {
-  auto integer_system = nn::make_system<decltype(test_manager)>(
-      [](auto& manager, [[maybe_unused]] float dt) {
+  auto integer_system = nn::make_system(
+      test_manager, [](auto& manager, [[maybe_unused]] float dt) {
         manager.template for_each<int>([](auto& v) { v = 0; });
       });
 
-  auto integer10_system = nn::make_system<decltype(test_manager)>(
-      [](auto& manager, [[maybe_unused]] float dt) {
+  auto integer10_system = nn::make_system(
+      test_manager, [](auto& manager, [[maybe_unused]] float dt) {
         for (auto it = manager.template begin<int>();
              it != manager.template end<int>(); ++it) {
           it->value = 10;
