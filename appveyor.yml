@@ -19,6 +19,8 @@ init:
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" (set generator="Visual Studio 15 2017 %arch%")
 - echo %generator%
 
+cache: c:\tools\vcpkg\installed
+
 before_build:
 - cmd: |-
     vcpkg install glew:x64-windows
