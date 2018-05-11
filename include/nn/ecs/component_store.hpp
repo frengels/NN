@@ -19,8 +19,8 @@ public:
   using component_type = C;
   using value_type = component<component_type>;
   using store_type = std::vector<value_type>;
-  using iterator = store_type::iterator;
-  using const_iterator = store_type::const_iterator;
+  using iterator = typename store_type::iterator;
+  using const_iterator = typename store_type::const_iterator;
 
 private:
   /**

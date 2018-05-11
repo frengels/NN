@@ -7,3 +7,4 @@ endfunction()
 
 nn_add_test(test_component_store test_component_store.cpp)
 nn_add_test(test_entity_manager test_entity_manager.cpp)
+nn_add_test(test_systems test_systems.cpp)

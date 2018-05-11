@@ -44,6 +44,10 @@ public:
     return *this;
   }
 
+  const nn::entity& entity() const {
+    return m_entity;
+  }
+
   friend void swap(entity_handle& lhs, entity_handle& rhs) {
     std::swap(lhs.m_manager, rhs.m_manager);
     std::swap(lhs.m_entity, rhs.m_entity);

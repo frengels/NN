@@ -13,6 +13,11 @@ template<typename... Components>
 class entity_manager {
   using entity_type = nn::entity;
 
+  template<typename C>
+  using component_iterator = typename component_store<C>::iterator;
+  template<typename C>
+  using component_const_iterator = typename component_store<C>::const_iterator;
+
 private:
   std::vector<uint32_t> m_entities;
   std::priority_queue<uint32_t> m_free_index;
@@ -23,23 +28,30 @@ public:
   entity_manager() = default;
 
   template<typename C>
-  component_store<C>::iterator begin() {
+  component_iterator<C> begin() {
     return std::begin(std::get<component_store<C>>(m_component_stores));
   }
 
   template<typename C>
-  component_store<C>::iterator end() {
+  component_iterator<C> end() {
     return std::end(std::get<component_store<C>>(m_component_stores));
   }
 
   template<typename C>
-  component_store<C>::iterator cbegin() {
+  component_const_iterator<C> cbegin() {
     return std::cbegin(std::get<component_store<C>>(m_component_stores));
   }
 
   template<typename C>
-  component_store<C>::iterator cend() {
+  component_const_iterator<C> cend() {
     return std::cend(std::get<component_store<C>>(m_component_stores));
+  }
+
+  template<typename C, class UnaryFunction>
+  void for_each(UnaryFunction f) {
+    for (auto it = begin<C>(); it != end<C>(); ++it) {
+      f(it->value);
+    }
   }
 
   nn::entity create() {
