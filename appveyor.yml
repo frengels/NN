@@ -21,6 +21,7 @@ init:
 
 before_build:
 - cmd: |-
+    vcpkg install spdlog:x64-windows
     mkdir build
     cd build
     cmake --version
