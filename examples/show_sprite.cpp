@@ -99,6 +99,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv) {
 
     glfwSwapBuffers(window);
   }
-
+#if defined(__linux__)
   shader_watch.stop();
+#endif
 }
