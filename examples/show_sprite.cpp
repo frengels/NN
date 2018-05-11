@@ -7,7 +7,9 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtx/transform.hpp>
 
+#if defined(__linux__)
 #include "nn/fs/fs_monitor.hpp"
+#endif
 #include "nn/render/2d/renderer2d.hpp"
 #include "nn/render/2d/sprite.hpp"
 #include "nn/render/debug.hpp"
@@ -48,12 +50,15 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv) {
 
   nn::shader_program prog = load_shaders();
 
-  nn::fs_monitor shader_watch;
+#if defined(__linux__)
 
+  nn::fs_monitor shader_watch;
   shader_watch.watch("examples/shaders/basic.vert");
   shader_watch.watch("examples/shaders/basic.frag");
 
   shader_watch.run();
+
+#endif
 
   auto cat2_tex = std::make_shared<nn::texture>("examples/textures/cat2.jpg");
   auto cat2_sprite(std::make_shared<nn::sprite>(cat2_tex));
@@ -71,12 +76,14 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv) {
                         GL_STENCIL_BUFFER_BIT));
     glfwPollEvents();
 
+#if defined(__linux__)
     nn::fs_event fs_event;
     while (shader_watch.poll_events(fs_event)) {
       if (fs_event.mask & IN_MODIFY) {
         prog = load_shaders();
       }
     }
+#endif
 
     prog.bind();
     auto scale =
