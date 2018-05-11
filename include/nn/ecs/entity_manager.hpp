@@ -22,6 +22,26 @@ private:
 public:
   entity_manager() = default;
 
+  template<typename C>
+  component_store<C>::iterator begin() {
+    return std::begin(std::get<component_store<C>>(m_component_stores));
+  }
+
+  template<typename C>
+  component_store<C>::iterator end() {
+    return std::end(std::get<component_store<C>>(m_component_stores));
+  }
+
+  template<typename C>
+  component_store<C>::iterator cbegin() {
+    return std::cbegin(std::get<component_store<C>>(m_component_stores));
+  }
+
+  template<typename C>
+  component_store<C>::iterator cend() {
+    return std::cend(std::get<component_store<C>>(m_component_stores));
+  }
+
   nn::entity create() {
     // case where free entities are queued
     if (!std::empty(m_free_index)) {
