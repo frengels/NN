@@ -38,7 +38,7 @@ nn::shader_program load_shaders() {
   return prog;
 }
 
-int main(int argc, char** argv) {
+int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv) {
   glfwInit();
   GLFWwindow* window = glfwCreateWindow(800, 800, "Sprite", nullptr, nullptr);
   glfwMakeContextCurrent(window);
