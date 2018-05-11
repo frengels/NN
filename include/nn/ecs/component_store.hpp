@@ -54,6 +54,13 @@ public:
 
   void remove(const entity& ent) {
     assert(ent.id != nn::entity::INVALID_ID);
+
+    // if bigger than our entries size then this entity doesn't have a component
+    // here
+    if (ent.id >= std::size(m_entries)) {
+      return;
+    }
+
     auto dense_index = m_entries[ent.id];
 
     assert(dense_index != nn::entity::INVALID_ID);

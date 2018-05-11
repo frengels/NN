@@ -46,12 +46,16 @@ public:
   }
 
   void destroy(const nn::entity& ent) {
+    // do nothing if the entity is invalid
+    if (ent.id == entity_type::INVALID_ID) {
+      return;
+    }
     assert(valid(ent));
 
     // remove all components from stores
     (remove<Components>(ent), ...);
     // increment version to invalidate all remaining entities
-    m_entities[ent] = ent.version + 1;
+    m_entities[ent.id] = ent.version + 1;
     m_free_index.push(ent.id);
   }
 
@@ -85,6 +89,10 @@ public:
   template<typename C>
   size_t size() const {
     return std::size(std::get<component_store<C>>(m_component_stores));
+  }
+
+  size_t size() const {
+    return std::size(m_entities) - std::size(m_free_index);
   }
 
   bool valid(const nn::entity& ent) {

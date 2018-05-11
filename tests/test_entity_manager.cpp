@@ -1,6 +1,7 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 
+#include "nn/ecs/entity_handle.hpp"
 #include "nn/ecs/entity_manager.hpp"
 
 struct entity_manager_fixture {
@@ -74,6 +75,53 @@ BOOST_AUTO_TEST_CASE(remove_multiple) {
 BOOST_AUTO_TEST_CASE(remove_invalid) {
   // TODO: removing an invalid entity will terminate due to assertion, not sure
   // how to handle this yet
+}
+
+// check if entity handles cooperate nicely with smart pointers
+BOOST_AUTO_TEST_CASE(create_handler) {
+  // unique ptr destroy
+  BOOST_REQUIRE(std::size(test_manager) == 3);
+  {
+    auto handle = nn::make_entity_unique(test_manager);
+    BOOST_REQUIRE(std::size(test_manager) == 4);
+  }
+
+  // shared ptr destroy
+  BOOST_REQUIRE(std::size(test_manager) == 3);
+  {
+    auto shared_handle = nn::make_entity_shared(test_manager);
+
+    BOOST_REQUIRE(std::size(test_manager) == 4);
+  }
+
+  BOOST_REQUIRE(std::size(test_manager) == 3);
+
+  // will keep the reference to not destroy the created entity
+  // shared ptr keep alive
+  std::shared_ptr<nn::entity_handle<decltype(test_manager)>> ref_keeper;
+
+  {
+    auto shared_handle = nn::make_entity_shared(test_manager);
+    BOOST_REQUIRE(std::size(test_manager) == 4);
+    ref_keeper = shared_handle;
+    BOOST_REQUIRE(std::size(test_manager) == 4);
+  }
+
+  BOOST_REQUIRE(std::size(test_manager) == 4);
+
+  // unique ptr move
+  std::unique_ptr<nn::entity_handle<decltype(test_manager)>> moved_to;
+
+  BOOST_REQUIRE(std::size(test_manager) == 4);
+  {
+    auto moved_from = nn::make_entity_unique(test_manager);
+    BOOST_REQUIRE(std::size(test_manager) == 5);
+    moved_to = std::move(moved_from);
+
+    BOOST_REQUIRE(std::size(test_manager) == 5);
+  }
+
+  BOOST_REQUIRE(std::size(test_manager) == 5);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
