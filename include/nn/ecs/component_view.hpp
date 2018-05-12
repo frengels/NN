@@ -24,7 +24,7 @@ public:
   }
 
   template<typename C>
-  constexpr component_type<C>* get() {
+  inline constexpr component_type<C>* get() {
     return std::get<component_type<C>*>(m_components);
   }
 }; // namespace nn

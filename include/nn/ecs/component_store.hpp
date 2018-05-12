@@ -57,8 +57,8 @@ public:
     std::vector<nn::entity> res;
     res.reserve(size());
 
-    for (const auto& component : *this) {
-      res.push_back(component.entity());
+    for (auto it = cbegin(); it != cend(); ++it) {
+      res.push_back(it->entity());
     }
 
     return res;

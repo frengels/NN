@@ -8,6 +8,7 @@
 #include "nn/ecs/component_store.hpp"
 #include "nn/ecs/component_view.hpp"
 #include "nn/ecs/entity.hpp"
+#include "nn/ecs/utility.hpp"
 
 namespace nn {
 template<typename... Components>
@@ -56,6 +57,15 @@ public:
   void for_each(UnaryFunction f) {
     for (auto it = begin<C>(); it != end<C>(); ++it) {
       f(*it);
+    }
+  }
+
+  template<typename... Cs, class Function>
+  void for_each_view(Function f) {
+    auto view_vector = view_array<Cs...>();
+
+    for (auto& view : view_vector) {
+      f(view);
     }
   }
 
@@ -132,29 +142,23 @@ public:
     auto length{std::numeric_limits<size_t>::max()};
 
     // find the shortest store
-    (
-        [&]() {
-          const auto& store = this->_store<Cs>();
-          if (std::size(store) < length) {
-            length = std::size(store);
-          }
-        },
-        ...);
+    nn::for_each_tuple(m_component_stores, [&](const auto& store) {
+      if (std::size(store) < length) {
+        length = std::size(store);
+      }
+    });
 
     // now that we have found the shortest store, request an array of entities
     // from this store so we can construct our array of views
     std::vector<nn::entity> entity_vector;
     bool shortest_found{false};
 
-    (
-        [&]() {
-          const auto& store = this->_store<Cs>();
-          // we haven't found the shortest yet and this is our shortest
-          if (!shortest_found && (std::size(store) == length)) {
-            entity_vector = store.entities();
-          }
-        },
-        ...);
+    nn::for_each_tuple(m_component_stores, [&](auto& store) {
+      if (!shortest_found && (std::size(store) == length)) {
+        entity_vector = store.entities();
+        shortest_found = true;
+      }
+    });
 
     // iterate over this entity list and construct a view list
     std::vector<component_view<Cs...>> views;
@@ -190,5 +194,10 @@ private:
   inline constexpr component_store<C>& _store() {
     return std::get<component_store<C>>(m_component_stores);
   }
-};
+
+  template<typename C>
+  inline constexpr const component_store<C>& _store() const {
+    return std::get<component_store<C>>(m_component_stores);
+  }
+}; // namespace nn
 } // namespace nn
