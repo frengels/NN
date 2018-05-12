@@ -95,18 +95,18 @@ BOOST_AUTO_TEST_CASE(constexpr_system) {
   BOOST_REQUIRE(!executed);
 
   auto iterating_system = nn::make_iterating_constexpr_system<long, int>(
-      test_manager, [](auto& l, auto& i, [[maybe_unused]] float dt) noexcept {
-        l = 0;
-        i = 5;
+      test_manager, [](auto& cl, auto& ci, [[maybe_unused]] float dt) noexcept {
+        cl->value = 0;
+        ci->value = 5;
       });
 
   iterating_system(test_manager, 0.0f);
 
   // all have components so just go through all of them
   test_manager.template for_each<int>(
-      [](auto& ci) { BOOST_REQUIRE(ci.value == 5); });
+      [](auto& ci) { BOOST_REQUIRE(ci->value == 5); });
   test_manager.template for_each<long>(
-      [](auto& cl) { BOOST_REQUIRE(cl.value == 0); });
+      [](auto& cl) { BOOST_REQUIRE(cl->value == 0); });
 }
 
 BOOST_AUTO_TEST_SUITE_END()

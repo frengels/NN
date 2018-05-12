@@ -50,6 +50,20 @@ public:
     return std::cend(m_components);
   }
 
+  /**
+   * return a vector containing a copy of all entities in this component store
+   */
+  std::vector<nn::entity> entities() const {
+    std::vector<nn::entity> res;
+    res.reserve(size());
+
+    for (const auto& component : *this) {
+      res.push_back(component.entity());
+    }
+
+    return res;
+  }
+
   void push(const entity& ent, const component_type& c) {
     // make sure the entity is valid
     // should be disabled in release mode

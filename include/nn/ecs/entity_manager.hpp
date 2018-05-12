@@ -59,12 +59,6 @@ public:
     }
   }
 
-  /*
-    template<typename C, typename... Cs, class UnaryFunction>
-    void for_each(UnaryFunction f) {
-    }
-    */
-
   nn::entity create() {
     // case where free entities are queued
     if (!std::empty(m_free_index)) {
@@ -107,26 +101,25 @@ public:
     // crash if invalid entity
     assert(valid(ent));
 
-    std::get<component_store<C>>(m_component_stores).push(ent, component);
+    _store<C>().push(ent, component);
   }
 
   template<typename C>
   void remove(const nn::entity& ent) {
     assert(valid(ent));
 
-    std::get<component_store<C>>(m_component_stores).remove(ent);
+    _store<C>().remove(ent);
   }
 
   template<typename C, typename... Args>
   void attach_emplace(const nn::entity& ent, Args&&... args) {
     assert(valid(ent));
-    std::get<component_store<C>>(m_component_stores)
-        .emplace(ent, std::forward<Args>(args)...);
+    _store<C>().emplace(ent, std::forward<Args>(args)...);
   }
 
   template<typename C>
   component<C>* get(const nn::entity& ent) {
-    return std::get<component_store<C>>(m_component_stores).get(ent);
+    return _store<C>().get(ent);
   }
 
   template<typename... Cs>
@@ -134,9 +127,49 @@ public:
     return component_view(get<Cs>(ent)...);
   }
 
+  template<typename... Cs>
+  std::vector<component_view<Cs...>> view_array() noexcept {
+    auto length{std::numeric_limits<size_t>::max()};
+
+    // find the shortest store
+    (
+        [&]() {
+          const auto& store = this->_store<Cs>();
+          if (std::size(store) < length) {
+            length = std::size(store);
+          }
+        },
+        ...);
+
+    // now that we have found the shortest store, request an array of entities
+    // from this store so we can construct our array of views
+    std::vector<nn::entity> entity_vector;
+    bool shortest_found{false};
+
+    (
+        [&]() {
+          const auto& store = this->_store<Cs>();
+          // we haven't found the shortest yet and this is our shortest
+          if (!shortest_found && (std::size(store) == length)) {
+            entity_vector = store.entities();
+          }
+        },
+        ...);
+
+    // iterate over this entity list and construct a view list
+    std::vector<component_view<Cs...>> views;
+    views.reserve(length);
+
+    for (const auto& entity : entity_vector) {
+      views.push_back(this->get_view<Cs...>(entity));
+    }
+
+    return views;
+  }
+
   template<typename C>
   size_t size() const {
-    return std::size(std::get<component_store<C>>(m_component_stores));
+    return std::size(_store<C>());
   }
 
   size_t size() const {
@@ -150,6 +183,12 @@ public:
 
     auto current_version = m_entities[ent.id];
     return current_version == ent.version;
+  }
+
+private:
+  template<typename C>
+  inline constexpr component_store<C>& _store() {
+    return std::get<component_store<C>>(m_component_stores);
   }
 };
 } // namespace nn
