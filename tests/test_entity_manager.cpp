@@ -7,9 +7,9 @@
 
 struct entity_manager_fixture {
   nn::entity_manager<float, int, std::string> test_manager;
-  nn::entity entity1;
-  nn::entity entity2;
-  nn::entity entity3;
+  nn::entity entity1; // nullptr, nullptr, nullptr
+  nn::entity entity2; // nullptr, nullptr, nullptr
+  nn::entity entity3; // 73.0f, 73, "Hello world"
 
   static_assert(
       nn::entity_manager_has_component<float, decltype(test_manager)>::value,
@@ -134,6 +134,31 @@ BOOST_AUTO_TEST_CASE(create_handler) {
 }
 
 BOOST_AUTO_TEST_CASE(component_view) {
+  auto test_view = test_manager.get_view<float, int>(entity1);
+
+  BOOST_REQUIRE(test_view.get<float>() == nullptr);
+  BOOST_REQUIRE(test_view.get<int>() == nullptr);
+
+  auto test_view_reverse = test_manager.get_view<int, float>(entity1);
+
+  BOOST_REQUIRE(test_view_reverse.get<float>() == nullptr);
+  BOOST_REQUIRE(test_view_reverse.get<int>() == nullptr);
+
+  auto valid_test_view =
+      test_manager.get_view<int, float, std::string>(entity3);
+
+  BOOST_REQUIRE(valid_test_view.get<float>()->value == 73.0f);
+  BOOST_REQUIRE(valid_test_view.get<int>()->value == 73);
+  BOOST_REQUIRE(
+      valid_test_view.get<std::string>()->value.compare("Hello world") == 0);
+
+  auto valid_test_view_reverse =
+      test_manager.get_view<std::string, float, int>(entity3);
+
+  BOOST_REQUIRE(valid_test_view_reverse.get<float>()->value == 73.0f);
+  BOOST_REQUIRE(valid_test_view_reverse.get<int>()->value == 73);
+  BOOST_REQUIRE(valid_test_view_reverse.get<std::string>()->value.compare(
+                    "Hello world") == 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

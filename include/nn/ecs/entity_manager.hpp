@@ -129,12 +129,11 @@ public:
     return std::get<component_store<C>>(m_component_stores).get(ent);
   }
 
-  /*
-    template<typename... Cs>
-    component_view<Cs...> get(const nn::entity& ent) noexcept(false) {
-      return component_view(get<Cs>...);
-    }
-  */
+  template<typename... Cs>
+  component_view<Cs...> get_view(const nn::entity& ent) noexcept {
+    return component_view(get<Cs>(ent)...);
+  }
+
   template<typename C>
   size_t size() const {
     return std::size(std::get<component_store<C>>(m_component_stores));

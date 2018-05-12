@@ -19,12 +19,12 @@ private:
   std::tuple<component<Cs>*...> m_components;
 
 public:
-  component_view(component_type<Cs>*... components)
+  constexpr component_view(component_type<Cs>*... components)
       : m_components{components...} {
   }
 
   template<typename C>
-  component_type<C>* get() {
+  constexpr component_type<C>* get() {
     return std::get<component_type<C>*>(m_components);
   }
 }; // namespace nn
