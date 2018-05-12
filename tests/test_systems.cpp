@@ -107,6 +107,24 @@ BOOST_AUTO_TEST_CASE(constexpr_system) {
       [](auto& ci) { BOOST_REQUIRE(ci.value == 5); });
   test_manager.template for_each<long>(
       [](auto& cl) { BOOST_REQUIRE(cl.value == 0); });
+
+  bool did_something{false};
+
+  auto invalid_iterating_system =
+      nn::make_iterating_constexpr_system<std::vector<int>, long>(
+          test_manager, [&](auto& view, [[maybe_unused]] float dt) noexcept {
+            did_something = true;
+            view.template get<std::vector<int>>()->value.push_back(0);
+            view.template get<long>()->value = 0.0f;
+          });
+
+  invalid_iterating_system(test_manager, 0.0f);
+
+  BOOST_REQUIRE(!did_something);
+  test_manager.template for_each<int>(
+      [](auto& ci) { BOOST_REQUIRE(ci.value == 5); });
+  test_manager.template for_each<long>(
+      [](auto& cl) { BOOST_REQUIRE(cl.value == 0); });
 }
 
 BOOST_AUTO_TEST_SUITE_END()
