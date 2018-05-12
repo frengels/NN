@@ -6,12 +6,12 @@
 #include "nn/ecs/entity_manager.hpp"
 
 namespace nn {
-template<typename EntityManager, typename ComponentFunc>
+template<typename EntityManager, typename F>
 class system {
 public:
   using entity_manager_type = EntityManager;
   // using function_type = std::function<void(entity_manager_type&, float)>;
-  using function_type = ComponentFunc;
+  using function_type = F;
 
 protected:
   function_type m_func;
@@ -21,15 +21,16 @@ public:
       : m_func{func} {
   }
 
-  void operator()(entity_manager_type& manager, float dt) {
+  void operator()(entity_manager_type& manager,
+                  float dt) noexcept(noexcept(m_func(manager, dt))) {
     m_func(manager, dt);
   }
 };
 
-template<typename EntityManager, typename ComponentFunc>
-nn::system<EntityManager, ComponentFunc>
-make_system([[maybe_unused]] const EntityManager&, ComponentFunc func) {
-  return nn::system<EntityManager, ComponentFunc>(func);
+template<typename EntityManager, typename F>
+nn::system<EntityManager, F> make_system([[maybe_unused]] const EntityManager&,
+                                         F func) {
+  return nn::system<EntityManager, F>(func);
 }
 
 template<typename EntityManager, typename F, typename... Cs>
@@ -47,7 +48,8 @@ public:
   }
 
   void operator()([[maybe_unused]] entity_manager_type& manager,
-                  [[maybe_unused]] float dt) {
+                  [[maybe_unused]] float dt) noexcept(noexcept(m_func(manager,
+                                                                      dt))) {
     if constexpr (nn::entity_manager_has_components<entity_manager_type,
                                                     Cs...>::value) {
       m_func(manager, dt);
@@ -62,5 +64,25 @@ nn::constexpr_system<EntityManager, F, Cs...>
 make_constexpr_system(const EntityManager&, F func) {
   return nn::constexpr_system<EntityManager, F, Cs...>(func);
 }
+
+template<typename EntityManager, typename F, typename C, typename... Cs>
+class iterating_constexpr_system {
+public:
+  using entity_manager_type = EntityManager;
+  using function_type = F;
+
+private:
+  function_type m_func;
+
+public:
+  iterating_constexpr_system(function_type func)
+      : m_func{func} {
+  }
+
+  void operator()([[maybe_unused]] entity_manager_type& manager,
+                  [[maybe_unused]] float dt) noexcept(noexcept(m_func(manager,
+                                                                      dt))) {
+  }
+};
 
 } // namespace nn
