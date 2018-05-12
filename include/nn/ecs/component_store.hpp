@@ -103,7 +103,7 @@ public:
     m_entries[component_entity.id] = dense_index;
   }
 
-  component_type* get(const entity_type& e) {
+  value_type* get(const entity_type& e) {
     if (e.id >= std::size(m_entries)) {
       return nullptr;
     }
@@ -114,8 +114,7 @@ public:
       return nullptr;
     }
 
-    auto& component = m_components[dense_index];
-    return &component.value;
+    return &m_components[dense_index];
   }
 
   bool contains(const entity& ent) {

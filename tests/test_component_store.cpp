@@ -26,6 +26,6 @@ BOOST_AUTO_TEST_CASE(insert_remove) {
 
   auto test1_ptr = test_store.get(test_entity);
 
-  BOOST_REQUIRE(test1.bestint == test1_ptr->bestint);
-  BOOST_REQUIRE(test1.meme.compare(test1_ptr->meme) == 0);
+  BOOST_REQUIRE(test1.bestint == test1_ptr->value.bestint);
+  BOOST_REQUIRE(test1.meme.compare(test1_ptr->value.meme) == 0);
 }

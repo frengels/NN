@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "nn/ecs/component_store.hpp"
+#include "nn/ecs/component_view.hpp"
 #include "nn/ecs/entity.hpp"
 
 namespace nn {
@@ -124,10 +125,16 @@ public:
   }
 
   template<typename C>
-  C* get(const nn::entity& ent) {
+  component<C>* get(const nn::entity& ent) {
     return std::get<component_store<C>>(m_component_stores).get(ent);
   }
 
+  /*
+    template<typename... Cs>
+    component_view<Cs...> get(const nn::entity& ent) noexcept(false) {
+      return component_view(get<Cs>...);
+    }
+  */
   template<typename C>
   size_t size() const {
     return std::size(std::get<component_store<C>>(m_component_stores));
