@@ -15,6 +15,10 @@ struct entity_manager_fixture {
       nn::entity_manager_has_component<float, decltype(test_manager)>::value,
       "entity manager does not contain float");
 
+  static_assert(nn::entity_manager_has_components<decltype(test_manager), float,
+                                                  int>::value,
+                "entity manager does not contain float and int");
+
   entity_manager_fixture() {
     entity1 = test_manager.create();
     entity2 = test_manager.create();
