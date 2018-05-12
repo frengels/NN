@@ -46,10 +46,11 @@ public:
       : m_func{func} {
   }
 
-  void operator()(entity_manager_type& manager) {
+  void operator()([[maybe_unused]] entity_manager_type& manager,
+                  [[maybe_unused]] float dt) {
     if constexpr (nn::entity_manager_has_components<entity_manager_type,
                                                     Cs...>::value) {
-      m_func(manager);
+      m_func(manager, dt);
     } else {
       // do nothing if it doesn't contain our required components
     }
