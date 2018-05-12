@@ -29,7 +29,7 @@ before_build:
     mkdir build
     cd build
     cmake --version
-    cmake .. -DCMAKE_TOOLCHAIN_FILE=c:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake -G %generator% # --config "%configuration%"
+    cmake .. -DCMAKE_TOOLCHAIN_FILE=c:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake -G %generator%
 
 build:
   project: c:\projects\cmake-init\build\$(APPVEYOR_PROJECT_NAME).sln
