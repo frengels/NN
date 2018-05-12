@@ -73,4 +73,24 @@ BOOST_AUTO_TEST_CASE(system_iteration) {
   }
 }
 
+BOOST_AUTO_TEST_CASE(constexpr_system) {
+
+  bool executed{false};
+
+  // temporary workaround, TODO: make type deduction work properly
+  auto valid_system = nn::make_constexpr_system<long, int>(
+      test_manager, [&]([[maybe_unused]] auto&) { executed = true; });
+
+  valid_system(test_manager);
+  BOOST_REQUIRE(executed);
+
+  executed = false;
+
+  auto invalid_system = nn::make_constexpr_system<std::wstring>(
+      test_manager, [&]([[maybe_unused]] auto&) { executed = true; });
+
+  invalid_system(test_manager);
+  BOOST_REQUIRE(!executed);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

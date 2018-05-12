@@ -51,13 +51,11 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv) {
   nn::shader_program prog = load_shaders();
 
 #if defined(__linux__)
-
   nn::fs_monitor shader_watch;
   shader_watch.watch("examples/shaders/basic.vert");
   shader_watch.watch("examples/shaders/basic.frag");
 
   shader_watch.run();
-
 #endif
 
   auto cat2_tex = std::make_shared<nn::texture>("examples/textures/cat2.jpg");
