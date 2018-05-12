@@ -11,10 +11,3 @@ if(CMAKE_CXX_COMPILER MATCHES "clang")
     set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic")
 endif(CMAKE_CXX_COMPILER MATCHES "clang")
 # TODO: handle msvc compilers warnings?
-
-if(DEFINED MIRALL_FATAL_WARNINGS)
-    if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER MATCHES "clang")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
-    endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER MATCHES "clang")
-    # TODO: handle msvc compilers warnings?
-endif(DEFINED MIRALL_FATAL_WARNINGS)
