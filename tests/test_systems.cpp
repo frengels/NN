@@ -79,8 +79,8 @@ BOOST_AUTO_TEST_CASE(constexpr_system) {
 
   // temporary workaround, TODO: make type deduction work properly
   auto valid_system = nn::make_constexpr_system<long, int>(
-      test_manager,
-      [&]([[maybe_unused]] auto&, [[maybe_unused]] float) { executed = true; });
+      test_manager, [&]([[maybe_unused]] auto&,
+                        [[maybe_unused]] float) noexcept { executed = true; });
 
   valid_system(test_manager, 0.0f);
   BOOST_REQUIRE(executed);
@@ -88,11 +88,23 @@ BOOST_AUTO_TEST_CASE(constexpr_system) {
   executed = false;
 
   auto invalid_system = nn::make_constexpr_system<std::wstring>(
-      test_manager,
-      [&]([[maybe_unused]] auto&, [[maybe_unused]] float) { executed = true; });
+      test_manager, [&]([[maybe_unused]] auto&,
+                        [[maybe_unused]] float) noexcept { executed = true; });
 
   invalid_system(test_manager, 0.0f);
   BOOST_REQUIRE(!executed);
+
+  auto iterating_system = nn::make_iterating_constexpr_system<long, int>(
+      test_manager, [](auto& l, auto& i, [[maybe_unused]] float dt) noexcept {
+        l = 0;
+        i = 5;
+      });
+
+  iterating_system(test_manager, 0.0f);
+
+  // all have components so just go through all of them
+  test_manager.template for_each<int>([](auto& i) { BOOST_REQUIRE(i == 5); });
+  test_manager.template for_each<long>([](auto& l) { BOOST_REQUIRE(l == 0); });
 }
 
 BOOST_AUTO_TEST_SUITE_END()

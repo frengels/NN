@@ -61,7 +61,7 @@ public:
 
 template<typename... Cs, typename EntityManager, typename F>
 nn::constexpr_system<EntityManager, F, Cs...>
-make_constexpr_system(const EntityManager&, F func) {
+make_constexpr_system([[maybe_unused]] const EntityManager&, F func) {
   return nn::constexpr_system<EntityManager, F, Cs...>(func);
 }
 
@@ -80,9 +80,20 @@ public:
   }
 
   void operator()([[maybe_unused]] entity_manager_type& manager,
-                  [[maybe_unused]] float dt) noexcept(noexcept(m_func(manager,
-                                                                      dt))) {
+                  [[maybe_unused]] float dt) noexcept {
+    if constexpr (nn::entity_manager_has_components<entity_manager_type, C,
+                                                    Cs...>::value) {
+      // do something
+    } else {
+      // do nothing
+    }
   }
 };
+
+template<typename C, typename... Cs, typename EntityManager, typename F>
+nn::iterating_constexpr_system<EntityManager, F, C, Cs...>
+make_iterating_constexpr_system([[maybe_unused]] const EntityManager&, F func) {
+  return nn::iterating_constexpr_system<EntityManager, F, C, Cs...>(func);
+}
 
 } // namespace nn
