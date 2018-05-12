@@ -38,5 +38,4 @@ build:
 
 test_script:
 - cd c:\projects\cmake-init\build\
-- dir
-- ctest
+- ctest -C %configuration%
