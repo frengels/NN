@@ -54,9 +54,15 @@ public:
   template<typename C, class UnaryFunction>
   void for_each(UnaryFunction f) {
     for (auto it = begin<C>(); it != end<C>(); ++it) {
-      f(it->value);
+      f(*it);
     }
   }
+
+  /*
+    template<typename C, typename... Cs, class UnaryFunction>
+    void for_each(UnaryFunction f) {
+    }
+    */
 
   nn::entity create() {
     // case where free entities are queued

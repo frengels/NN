@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(iterate_components) {
 BOOST_AUTO_TEST_CASE(system_iteration) {
   auto integer_system = nn::make_system(
       test_manager, [](auto& manager, [[maybe_unused]] float dt) {
-        manager.template for_each<int>([](auto& v) { v = 0; });
+        manager.template for_each<int>([](auto& c) { c.value = 0; });
       });
 
   auto integer10_system = nn::make_system(
@@ -103,8 +103,10 @@ BOOST_AUTO_TEST_CASE(constexpr_system) {
   iterating_system(test_manager, 0.0f);
 
   // all have components so just go through all of them
-  test_manager.template for_each<int>([](auto& i) { BOOST_REQUIRE(i == 5); });
-  test_manager.template for_each<long>([](auto& l) { BOOST_REQUIRE(l == 0); });
+  test_manager.template for_each<int>(
+      [](auto& ci) { BOOST_REQUIRE(ci.value == 5); });
+  test_manager.template for_each<long>(
+      [](auto& cl) { BOOST_REQUIRE(cl.value == 0); });
 }
 
 BOOST_AUTO_TEST_SUITE_END()

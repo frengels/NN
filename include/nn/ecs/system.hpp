@@ -83,7 +83,7 @@ public:
                   [[maybe_unused]] float dt) noexcept {
     if constexpr (nn::entity_manager_has_components<entity_manager_type, C,
                                                     Cs...>::value) {
-      // do something
+      // manager.template for_each<C, Cs...>(m_func);
     } else {
       // do nothing
     }
