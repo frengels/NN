@@ -34,3 +34,7 @@ build:
   project: c:\projects\cmake-init\build\$(APPVEYOR_PROJECT_NAME).sln
   verbosity: minimal
   parallel: true
+
+test_script:
+- cd c:\projects\cmake-init\build\
+- ctest

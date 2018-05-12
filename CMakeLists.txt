@@ -25,4 +25,6 @@ find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 add_subdirectory(src/nn)
 add_subdirectory(examples)
+
+enable_testing()
 add_subdirectory(tests)
