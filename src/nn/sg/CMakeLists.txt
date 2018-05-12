@@ -5,3 +5,4 @@ set(SG_SRC
 
 add_library(sg ${SG_SRC})
 target_include_directories(sg PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(sg glm)

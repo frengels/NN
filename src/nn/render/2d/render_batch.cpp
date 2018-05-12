@@ -96,11 +96,11 @@ void render_batch::push(const mesh_type& mesh,
 
   std::copy(std::data(vertices), std::data(vertices) + std::size(vertices),
             m_mapped_vertices + m_num_vertices);
-  m_num_vertices += std::size(vertices);
+  m_num_vertices += static_cast<GLsizei>(std::size(vertices));
 
   std::copy(std::data(indices), std::data(indices) + std::size(indices),
             m_mapped_indices + m_num_indices);
-  m_num_indices += std::size(indices);
+  m_num_indices += static_cast<GLsizei>(std::size(indices));
 }
 
 void render_batch::flush() {
