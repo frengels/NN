@@ -5,18 +5,15 @@ configuration:
 - Debug
 platform:
 - x64
-environment:
-  matrix:
-  - arch: x64
-  - arch: x86
+- x86
 
 matrix:
   fast_finish: true
 
 init:
-- if "%arch%"=="x64" (set generator="Visual Studio 15 2017 Win64")
-- if "%arch%"=="x86" (set generator="Visual Studio 15 2017")
-- echo %arch%
+- if "%platform%"=="x64" (set generator="Visual Studio 15 2017 Win64")
+- if "%platform%"=="x86" (set generator="Visual Studio 15 2017")
+- echo %platform%
 - echo %APPVEYOR_BUILD_WORKER_IMAGE%
 - echo %generator%
 
@@ -24,7 +21,7 @@ cache: c:\tools\vcpkg\installed
 
 before_build:
 - cmd: |-
-    vcpkg install stb:%arch%-windows glm:%arch%-windows glew:%arch%-windows glfw3:%arch%-windows spdlog:%arch%-windows boost-test:%arch%-windows
+    vcpkg install stb:%platform%-windows glm:%platform%-windows glew:%platform%-windows glfw3:%platform%-windows spdlog:%platform%-windows boost-test:%platform%-windows
     mkdir build
     cd build
     cmake --version
