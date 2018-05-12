@@ -31,6 +31,6 @@ before_build:
     cmake .. -DCMAKE_TOOLCHAIN_FILE=c:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake -G %generator%
 
 build:
-  project: c:\projects\cmake-init\build\NN.sln
+  project: c:\projects\cmake-init\build\$(APPVEYOR_PROJECT_NAME).sln
   verbosity: minimal
   parallel: true
