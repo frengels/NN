@@ -7,15 +7,15 @@ platform:
 - x64
 environment:
   matrix:
-  - arch: Win64
-  - arch: Win32
+  - arch: x64
+  - arch: x86
 
 matrix:
   fast_finish: true
 
 init:
-- if "%arch%"=="Win64" (set generator="Visual Studio 15 2017 Win64")
-- if "%arch%"=="Win32" (set generator="Visual Studio 15 2017")
+- if "%arch%"=="x64" (set generator="Visual Studio 15 2017 Win64")
+- if "%arch%"=="x86" (set generator="Visual Studio 15 2017")
 - echo %arch%
 - echo %APPVEYOR_BUILD_WORKER_IMAGE%
 - echo %generator%
@@ -24,7 +24,7 @@ cache: c:\tools\vcpkg\installed
 
 before_build:
 - cmd: |-
-    vcpkg install stb:x64-windows glm:x64-windows glew:x64-windows glfw3:x64-windows spdlog:x64-windows boost-test:x64-windows
+    vcpkg install stb:%arch%-windows glm:%arch%-windows glew:%arch%-windows glfw3:%arch%-windows spdlog:%arch%-windows boost-test:%arch%-windows
     mkdir build
     cd build
     cmake --version
