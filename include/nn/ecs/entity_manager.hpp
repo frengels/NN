@@ -134,7 +134,7 @@ public:
 
   template<typename... Cs>
   component_view<Cs...> get_view(const nn::entity& ent) noexcept {
-    return component_view(get<Cs>(ent)...);
+    return component_view<Cs...>(get<Cs>(ent)...);
   }
 
   template<typename... Cs>
