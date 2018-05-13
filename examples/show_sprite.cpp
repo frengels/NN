@@ -10,6 +10,9 @@
 #include "nn/fs/fs_monitor.hpp"
 #include <unistd.h>
 #endif
+#include "nn/ecs/entity_handle.hpp"
+#include "nn/ecs/systems/renderable2d_system.hpp"
+#include "nn/ecs/systems/transform2d_system.hpp"
 #include "nn/render/2d/renderer2d.hpp"
 #include "nn/render/2d/sprite.hpp"
 #include "nn/render/debug.hpp"
@@ -48,6 +51,19 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv) {
   // after window because we need an opengl context first
   glewInit();
 
+  nn::entity_manager<nn::transform2d_component, nn::sprite_component> manager;
+
+  auto cat1 = nn::make_entity_unique(manager);
+  auto cat2 = nn::make_entity_unique(manager);
+
+  manager.attach_emplace<nn::transform2d_component>(
+      cat1->entity(), glm::vec2(-300.0f, 0.0f), glm::vec2(1.0f, 1.0f), 0.0f, 0,
+      0.0f);
+
+  manager.attach_emplace<nn::transform2d_component>(
+      cat2->entity(), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), 0.0f, -1,
+      0.1f);
+
   nn::shader_program prog = load_shaders();
 
 #if defined(__linux__)
@@ -59,12 +75,12 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv) {
 #endif
 
   auto cat2_tex = std::make_shared<nn::texture>("examples/textures/cat2.jpg");
-  auto cat2_sprite(std::make_shared<nn::sprite>(cat2_tex));
-
   auto cat_tex = std::make_shared<nn::texture>("examples/textures/cat.png");
-  auto cat_sprite(std::make_shared<nn::sprite>(cat_tex));
 
-  nn::renderer2d sprite_renderer;
+  manager.attach_emplace<nn::sprite_component>(cat1->entity(), true, cat_tex);
+  manager.attach_emplace<nn::sprite_component>(cat2->entity(), true, cat2_tex);
+
+  nn::renderer_system<decltype(manager)> render_system(manager);
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -87,13 +103,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv) {
     auto scale =
         glm::scale(glm::vec3(0.002f, 0.002f, 0.002f)); // make cat fit on screen
 
-    sprite_renderer.push(*cat_sprite,
-                         glm::translate(glm::vec3(-300.f, 0.f, 0.f)), 0, 0.f);
-    sprite_renderer.push(*cat2_sprite, glm::mat4(), -1, 0.1f);
-
     prog.bind();
     prog.uniform(nn::shader_program::MVP_LOCATION, scale);
-    sprite_renderer.flush();
+
+    render_system(manager, 0.0f);
 
     glfwSwapBuffers(window);
   }

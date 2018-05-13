@@ -6,6 +6,7 @@ set(RENDER_SRC
     shader.cpp
     shader_program.cpp
     camera.cpp
+    utility.cpp
     2d/orthographic_camera.cpp
     2d/render_batch.cpp
     2d/sprite.cpp
