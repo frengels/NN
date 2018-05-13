@@ -21,13 +21,19 @@ public:
   }
 
   template<typename... Args>
-  component(const entity& ent, Args... args)
+  component(const entity& ent, Args&&... args)
       : m_entity(ent)
       , value(std::forward<Args>(args)...) {
   }
 
   const nn::entity& entity() const {
     return m_entity;
+  }
+
+  friend void swap(component<T>& lhs, component<T>& rhs) {
+    using std::swap;
+    swap(lhs.m_entity, rhs.m_entity);
+    swap(lhs.value, rhs.value);
   }
 };
 } // namespace nn

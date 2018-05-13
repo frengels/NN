@@ -1,5 +1,7 @@
 #include "nn/render/2d/sprite.hpp"
 
+#include "nn/render/utility.hpp"
+
 namespace nn {
 sprite::sprite(const std::shared_ptr<nn::texture>& tex, const stclip& clip,
                const glm::vec2& anchor)
@@ -32,4 +34,15 @@ void sprite::set_anchor(const glm::vec2& a) {
   float clip_h = static_cast<float>(m_clip.height);
   offset = glm::vec2(-clip_w * m_anchor.x, -clip_h * m_anchor.y);
 }
+
+void swap(sprite& lhs, sprite& rhs) {
+  using std::swap;
+  swap(lhs.mesh, rhs.mesh);
+  nn::swap(lhs.offset, rhs.offset);
+  swap(lhs.texture, rhs.texture);
+
+  nn::swap(lhs.m_anchor, rhs.m_anchor);
+  swap(lhs.m_clip, rhs.m_clip);
+}
+
 } // namespace nn

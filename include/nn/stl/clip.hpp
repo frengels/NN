@@ -50,6 +50,13 @@ struct clip {
 
     return mesh<V, I>(std::move(vertices), std::move(indices));
   }
+
+  friend void swap(clip<T>& lhs, clip<T>& rhs) {
+    std::swap(lhs.x, rhs.x);
+    std::swap(lhs.y, rhs.y);
+    std::swap(lhs.width, rhs.width);
+    std::swap(lhs.height, rhs.height);
+  }
 };
 
 typedef clip<size_t> stclip;

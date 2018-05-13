@@ -45,10 +45,13 @@ public:
   sprite(sprite&&) = default;
 
   sprite& operator=(const sprite&) = default;
+  sprite& operator=(sprite&&) = default;
 
   const stclip& clip() const;
 
   const glm::vec2& anchor() const;
   void set_anchor(const glm::vec2& a);
+
+  friend void swap(sprite& lhs, sprite& rhs);
 };
 } // namespace nn
