@@ -4,6 +4,16 @@
 #include <glm/gtx/transform.hpp>
 
 namespace nn {
+
+transform::transform(const glm::vec2& pos, const glm::vec2& scale,
+                     float angle = 0.0f, int z_layer = 0, float z_offset = 0.0f)
+    : position{pos}
+    , scale{scale}
+    , angle{angle}
+    , z_layer{z_layer}
+    , z_offset{z_offset} {
+}
+
 float transform::angle_deg() const {
   return glm::degrees(angle);
 }

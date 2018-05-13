@@ -18,6 +18,8 @@ struct transform {
   float z_offset{0.0f};
 
   transform() = default;
+  transform(const glm::vec2& pos, const glm::vec2& scale, float angle = 0.0f,
+            int z_layer = 0, float z_offset = 0.0f);
 
   float angle_deg() const;
 
