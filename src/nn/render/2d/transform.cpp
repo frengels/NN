@@ -5,8 +5,8 @@
 
 namespace nn {
 
-transform::transform(const glm::vec2& pos, const glm::vec2& scale,
-                     float angle = 0.0f, int z_layer = 0, float z_offset = 0.0f)
+transform::transform(const glm::vec2& pos, const glm::vec2& scale, float angle,
+                     int z_layer, float z_offset)
     : position{pos}
     , scale{scale}
     , angle{angle}
